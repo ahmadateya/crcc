@@ -5,7 +5,7 @@ services:
     env_file: .env
     container_name: ${BACKEND_CONTAINER_NAME}
     volumes:
-      - ./backend:/app
+      - ./backend:/backend
     command: sh scripts/entrypoint.sh
     depends_on:
       - db
@@ -19,8 +19,6 @@ services:
     container_name: ${BACKEND_PROXY_CONTAINER_NAME}
     ports:
       - ${BACKEND_PROXY_PORT}:80
-#    volumes:
-#      - ./backend:/var/www
     depends_on:
       - backend
     networks:
@@ -39,6 +37,16 @@ services:
       POSTGRESS_DB: 'rootuserpassword'
     volumes:
       - ./.docker-data/dbdata:/var/lib/postgresql
+    networks:
+      - crcc-docker-network
+
+  frontend:
+    build: frontend
+    container_name: ${FRONTEND_CONTAINER_NAME}
+    restart: always
+    ports:
+      - "3000:3000"
+    command: "npm run start"
     networks:
       - crcc-docker-network
 

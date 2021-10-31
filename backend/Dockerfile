@@ -1,9 +1,9 @@
 FROM golang:1.17-alpine
 
 # Setup the Go app
-RUN mkdir /app
-COPY . /app
-WORKDIR /app
+RUN mkdir /backend
+COPY . /backend
+WORKDIR /backend
 
 RUN go get github.com/githubnemo/CompileDaemon
 
