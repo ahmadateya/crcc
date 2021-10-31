@@ -1,0 +1,49 @@
+version: "3.5"
+services:
+  backend:
+    build: backend
+    env_file: .env
+    container_name: ${BACKEND_CONTAINER_NAME}
+    volumes:
+      - ./backend:/app
+    command: sh scripts/entrypoint.sh
+    depends_on:
+      - db
+    networks:
+      - crcc-docker-network
+
+
+  proxy:
+    env_file: .env
+    build: proxy
+    container_name: ${BACKEND_PROXY_CONTAINER_NAME}
+    ports:
+      - ${BACKEND_PROXY_PORT}:80
+#    volumes:
+#      - ./backend:/var/www
+    depends_on:
+      - backend
+    networks:
+      - crcc-docker-network
+
+  db:
+    env_file: .env
+    container_name: ${DB_CONTAINER_NAME}
+    image: postgres:11.1-alpine
+    restart: always
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_USER: 'db_user'
+      POSTGRES_PASSWORD: 'userpassword'
+      POSTGRESS_DB: 'rootuserpassword'
+    volumes:
+      - ./.docker-data/dbdata:/var/lib/postgresql
+    networks:
+      - crcc-docker-network
+
+networks:
+  crcc-docker-network:
+    name: ${DOCKER_NETWORK_NAME}
+    external: true
+    driver: bridge
