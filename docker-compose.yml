@@ -44,9 +44,11 @@ services:
     build: frontend
     container_name: ${FRONTEND_CONTAINER_NAME}
     restart: always
+    volumes:
+      - ./frontend:/frontend
     ports:
-      - "3000:3000"
-    command: "npm run start"
+      - ${FRONTEND_APP_PORT}:3000
+    command: sh -c "npm install && npm run dev"
     networks:
       - crcc-docker-network
 
