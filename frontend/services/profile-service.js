@@ -6,8 +6,9 @@ const jsona = new Jsona();
 function get(params, axios) {
   return axios.get(`${url}/me`)
     .then(response => {
-      return {
-        list: jsona.deserialize(response.data),
+        console.log(jsona.deserialize(response.data), " deserialized")
+        return {
+        list: response.data,
         meta: response.data.meta
       };
     });

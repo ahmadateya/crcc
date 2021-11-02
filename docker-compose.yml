@@ -7,22 +7,25 @@ services:
     volumes:
       - ./backend:/backend
     command: sh scripts/entrypoint.sh
+    ports:
+      - 8080:8080 # exposed without the proxy
     depends_on:
       - db
     networks:
       - crcc-docker-network
 
 
-  proxy:
-    env_file: .env
-    build: proxy
-    container_name: ${BACKEND_PROXY_CONTAINER_NAME}
-    ports:
-      - ${BACKEND_PROXY_PORT}:80
-    depends_on:
-      - backend
-    networks:
-      - crcc-docker-network
+    # Not used due CORS problems
+#  proxy:
+#    env_file: .env
+#    build: proxy
+#    container_name: ${BACKEND_PROXY_CONTAINER_NAME}
+#    ports:
+#      - ${BACKEND_PROXY_PORT}:80
+#    depends_on:
+#      - backend
+#    networks:
+#      - crcc-docker-network
 
   db:
     env_file: .env

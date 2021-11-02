@@ -39,7 +39,7 @@ module.exports = {
     description: false,
     viewport: false,
     charset: false,
-   },
+  },
   /*
    ** Headers of the page
    */
@@ -57,7 +57,7 @@ module.exports = {
       {
         name: "keywords",
         content:
-          "creative tim, updivision, html dashboard, nuxt, laravel, vue, vuejs, json:api, json, api, html css dashboard laravel, nuxt argon dashboard laravel, nuxt argon dashboard, argon admin, nuxt dashboard, nuxt admin, web dashboard, bootstrap 4 dashboard laravel, bootstrap 4, css3 dashboard, bootstrap 4 admin laravel, argon dashboard bootstrap 4 laravel, frontend, responsive bootstrap 4 dashboard, argon dashboard, argon laravel bootstrap 4 dashboard"
+            "creative tim, updivision, html dashboard, nuxt, laravel, vue, vuejs, json:api, json, api, html css dashboard laravel, nuxt argon dashboard laravel, nuxt argon dashboard, argon admin, nuxt dashboard, nuxt admin, web dashboard, bootstrap 4 dashboard laravel, bootstrap 4, css3 dashboard, bootstrap 4 admin laravel, argon dashboard bootstrap 4 laravel, frontend, responsive bootstrap 4 dashboard, argon dashboard, argon laravel bootstrap 4 dashboard"
       },
       {
         itemprop: "name",
@@ -66,12 +66,12 @@ module.exports = {
       {
         itemprop: "description",
         content:
-          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
       },
       {
         itemprop: "image",
         content:
-          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
       },
       {
         name: "twitter:card",
@@ -88,7 +88,7 @@ module.exports = {
       {
         name: "twitter:description",
         content:
-          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
       },
       {
         name: "twitter:creator",
@@ -97,7 +97,7 @@ module.exports = {
       {
         name: "twitter:image",
         content:
-          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
       },
       {
         property: "fb:app_id",
@@ -114,17 +114,17 @@ module.exports = {
       {
         property: "og:url",
         content:
-          "https://www.creative-tim.com/live/nuxt-argon-dashboard-laravel"
+            "https://www.creative-tim.com/live/nuxt-argon-dashboard-laravel"
       },
       {
         property: "og:image",
         content:
-          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
       },
       {
         property: "og:description",
         content:
-          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
       },
       {
         property: "og:site_name",
@@ -136,13 +136,13 @@ module.exports = {
       {
         rel: "stylesheet",
         href:
-          "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+            "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
       },
       {
         rel: "stylesheet",
         href: "https://use.fontawesome.com/releases/v5.6.3/css/all.css",
         integrity:
-          "sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/",
+            "sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/",
         crossorigin: "anonymous"
       }
     ]

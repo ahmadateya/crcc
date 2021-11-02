@@ -8,13 +8,16 @@ This is an exhaustive list for the technologies that I used in this app:
 2. PostgreSQL
 3. Nginx (web server as a proxy)
 4. [Standard Go Project Layout](https://github.com/golang-standards/project-layout) the project structure we follow
-5. Docker & Docker compose
-6. gRPC a framework for implementing RPC APIs via HTTP/2 (Not yet)
+5. NuxtJs framework with Aragon theme [live preview](https://nuxt-argon-dashboard-laravel.creative-tim.com/dashboard/).
+6. Json and [Json:api](https://jsonapi.org/) a standard for sending and receiving json structure
+7. Docker & Docker compose for containers management.
+
+[comment]: <> (8. gRPC a framework for implementing RPC APIs via HTTP/2 &#40;Not yet&#41;)
 
 
-## To Run the app
--  copy `config.yml.example` to `config.yml` .
--  `docker-compose up` you may need `sudo` .
-## Endpoints & Docs
+## To Run the app all you need run `sh start.sh`
+
+
+## Endpoints & Docs (Not Yet)
 - [Postman Collection](#)
 - [Postman Documentation](#)
