@@ -119,13 +119,14 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        await this.$auth.loginWith("local", {
+        await this.$auth.loginWith('local', {
           data: this.form,
         });
         this.$axios.defaults.headers.common.Authorization = `${this.$auth.getToken(
           "local"
         )}`;
-        this.$router.push("/dashboard");
+        // console.log(this.$axios.defaults.headers.common.Authorization, "header");
+        await this.$router.push("/dashboard");
       } catch (error) {
         await this.$notify({
           type: "danger",

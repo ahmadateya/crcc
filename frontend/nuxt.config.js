@@ -17,7 +17,7 @@
 
 const pkg = require("./package");
 console.log("ENV", process.env.NODE_ENV);
-const { default: isDemo } = require("./plugins/isDemo");
+// const { default: isDemo } = require("./plugins/isDemo");
 
 module.exports = {
   env: {
@@ -161,10 +161,10 @@ module.exports = {
     "assets/sass/argon.scss",
     "~assets/css/style.css"
   ],
-
-  router: {
-    middleware: ['auth']
-  },
+  //
+  // router: {
+  //   middleware: ['auth']
+  // },
   /*
    ** Plugins to load before mounting the App
    */
@@ -192,7 +192,7 @@ module.exports = {
   auth: {
     strategies: {
       local: {
-        _scheme: "~/util/authCustomStrategy.js",
+        // _scheme: "~/util/authCustomStrategy.js",
         endpoints: {
           login: {
             url: "login",
