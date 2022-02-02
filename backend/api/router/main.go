@@ -6,19 +6,19 @@ import (
 	//"github.com/ahmadateya/crcc/api/router"
 )
 
-
-func Init(){
-	//router := gin.New()
+func Init() *gin.Engine {
+	r := gin.New()
 	//router.Use(gin.Logger())
 	//router.Use(gin.Recovery())
+	InitializeConfig(r)
+	getRoutes(r)
+	return r
 }
-
 
 // InitializeConfig initialize default configurations
-func InitializeConfig(router *gin.Engine)  {
-	router.Use(CORSMiddleware())
+func InitializeConfig(r *gin.Engine) {
+	r.Use(CORSMiddleware())
 }
-
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
