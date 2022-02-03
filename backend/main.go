@@ -4,16 +4,15 @@ import (
 
 	//"github.com/ahmadateya/crcc/config"
 	"github.com/ahmadateya/crcc/api/router"
+	"github.com/ahmadateya/crcc/config"
 )
 
 func main() {
-	//viper := config.NewViper()
 	//var newDB db.Database
 	//newDB = db.NewPostgres()
 	//obj := newDB.Open()
 	//defer obj.Close()
 	//InitializeConfig(router)
-	//
 	//v1 := router.Group("/api/v1")
 	//InitializeRouts(obj, v1)
 	//err = router.Run(viper.Server.Port)
@@ -21,8 +20,12 @@ func main() {
 	//	fmt.Println(err)
 	//}
 
+	// initiating the config file
+	viper := config.NewViper()
+
+	// initiating the routes and router config
 	r := router.Init()
-	err := r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	err := r.Run(viper.Server.Port)
 	if err != nil {
 		return
 	}

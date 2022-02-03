@@ -1,0 +1,14 @@
+database:
+  connection: 'host=postgres-dev port=5432 password=123 user=gis dbname=gis sslmode=disable'
+  dropTables: true
+  seedData: true
+
+server:
+  port: ':8080'
+  host: ''
+  baseHost: ''
+
+app:
+  docker:
+    host: 'http://172.17.0.1'
+    port: '6666'

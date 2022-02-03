@@ -5,6 +5,7 @@ RUN mkdir /backend
 COPY . /backend
 WORKDIR /backend
 
+RUN apk add --update --no-cache openssl bash alpine-sdk autoconf vim gd libzip-dev zip unzip
 RUN go get github.com/githubnemo/CompileDaemon
 
 # Expose the port the app will run on
