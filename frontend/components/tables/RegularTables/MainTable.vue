@@ -12,6 +12,7 @@
         prop="name"
         sortable>
         <template v-slot="{row}">
+          {{ row.id }}
           <div class="media align-items-center">
             <a href="#" class="avatar rounded-circle mr-3">
               <img alt="Image placeholder" :src="row.img">
