@@ -15,10 +15,7 @@
   </div>
 </template>
 <script>
-import users from '~/components/tables/users'
-import LightTable from "~/components/tables/RegularTables/LightTable";
 import MainTable from "~/components/tables/RegularTables/MainTable";
-import http from 'http-proxy'
 import Jsona from 'jsona';
 const url = process.env.apiUrl;
 const jsona = new Jsona();
@@ -28,11 +25,6 @@ export default {
 
   components: {
     MainTable,
-    // [Dropdown.name]: Dropdown,
-    // [DropdownItem.name]: DropdownItem,
-    // [DropdownMenu.name]: DropdownMenu,
-    // [Table.name]: Table,
-    // [TableColumn.name]: TableColumn
   },
   data() {
     return {
@@ -41,9 +33,6 @@ export default {
       valid:true
     }
   },
-  // created() {
-  //   this.getProfile();
-  // },
   async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
      await this.$axios.get(`${url}/containers`)

@@ -16,11 +16,11 @@
         <template v-slot="{row}">
           <div class="media align-items-center">
               <li v-for="name in row.names" :key="name"  class="list-unstyled">
-                  <router-link :to="`containers/${name}`">
-                      <span class="font-weight-600 name mb-0 text-sm">
-                                        {{ name }}
-                      </span>
-                  </router-link>
+                <a :href="'/containers' + name" class="text-sm font-weight-bold">
+                  <span class="font-weight-600 name mb-0 text-sm">
+                          {{ name }}
+                  </span>
+                </a>
               </li>
           </div>
         </template>
@@ -59,9 +59,7 @@
   </div>
 </template>
 <script>
-import projects from './../projects'
 import { Table, TableColumn, DropdownMenu, DropdownItem, Dropdown} from 'element-ui'
-import { json } from 'd3';
 export default {
   name: 'main-table',
   props: ["rows"],

@@ -2,7 +2,6 @@ package container
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
 	"github.com/gin-gonic/gin"
@@ -24,7 +23,6 @@ func Show(c *gin.Context) {
 	container := containerPkg.GetContainerInfo(containerName)
 	var data models.Container
 	err := json.Unmarshal([]byte(container), &data)
-	fmt.Printf(container)
 	if err != nil {
 		c.JSON(404, err.Error())
 	}
