@@ -18,7 +18,19 @@ func ListContainers() string {
 		return fmt.Sprintf("The HTTP request failed with error %s\n", err)
 	} else {
 		data, _ := ioutil.ReadAll(response.Body)
-		fmt.Println(string(data))
+		return string(data)
+	}
+}
+
+// GetContainerInfo get container info
+func GetContainerInfo(containerId string) string {
+	viper := config.NewViper()
+	url := fmt.Sprintf("%s:%s/containers/%s/json", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
+	response, err := http.Get(url)
+	if err != nil {
+		return fmt.Sprintf("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
 		return string(data)
 	}
 }
