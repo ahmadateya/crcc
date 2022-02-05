@@ -7,26 +7,26 @@
     <el-table class="table-responsive table-flush"
               header-row-class-name="thead-light"
               :data="rows">
-      <el-table-column label="Container ID" prop="id" width="200">
+      <el-table-column label="Container Name" prop="id" width="200">
         min-width="310px"
         prop="name"
         sortable>
         <template v-slot="{row}">
-          {{ row.id }}
           <div class="media align-items-center">
-            <a href="#" class="avatar rounded-circle mr-3">
-              <img alt="Image placeholder" :src="row.img">
+            <a href="#">
+              <span class="font-weight-600 name mb-0 text-sm">{{row.names[0]}}</span>
             </a>
-            <div class="media-body">
-              <span class="font-weight-600 name mb-0 text-sm">{{row.title}}</span>
-            </div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Budget"
+      <el-table-column label="Container ID"
                        prop="budget"
                        min-width="140px"
                        sortable>
+                       <template v-slot="{row}">
+          {{ row.id }}
+          
+        </template>
       </el-table-column>
 
       <el-table-column label="Status"
@@ -35,46 +35,19 @@
                        sortable>
         <template v-slot="{row}">
           <badge class="badge-dot mr-4" type="">
-            <i :class="`bg-${row.statusType}`"></i>
+            <i :class="`bg-${row.ports[0].type}`"></i>
             <span class="status">{{row.status}}</span>
           </badge>
         </template>
       </el-table-column>
 
-      <el-table-column label="Users" min-width="190px">
-        <div class="avatar-group">
-          <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-             data-original-title="Ryan Tompson">
-            <img alt="Image placeholder" src="/img/theme/team-1.jpg">
-          </a>
-          <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-             data-original-title="Romina Hadid">
-            <img alt="Image placeholder" src="/img/theme/team-2.jpg">
-          </a>
-          <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-             data-original-title="Alexander Smith">
-            <img alt="Image placeholder" src="/img/theme/team-3.jpg">
-          </a>
-          <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-             data-original-title="Jessica Doe">
-            <img alt="Image placeholder" src="/img/theme/team-4.jpg">
-          </a>
-        </div>
-      </el-table-column>
-
-      <el-table-column label="Completion"
-                       prop="completion"
-                       min-width="240px"
-                       sortable>
-        <template v-slot="{row}">
-          <div class="d-flex align-items-center">
-            <span class="completion mr-2">{{row.completion}}%</span>
-            <div>
-              <base-progress :type="row.statusType" :value="row.completion"/>
-            </div>
-          </div>
+      <el-table-column label="Image" min-width="190px">
+       <template v-slot="{row}">
+          {{ row.image }}
         </template>
       </el-table-column>
+
+      
       <el-table-column min-width="180px">
         <template v-slot="{row}">
           <el-dropdown trigger="click" class="dropdown">
@@ -95,9 +68,10 @@
 <script>
 import projects from './../projects'
 import { Table, TableColumn, DropdownMenu, DropdownItem, Dropdown} from 'element-ui'
+import { json } from 'd3';
 export default {
   name: 'main-table',
-  props: ['rows'],
+  props: ["rows"],
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
@@ -105,5 +79,6 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [DropdownMenu.name]: DropdownMenu,
   },
+  
 }
 </script>
