@@ -7,59 +7,52 @@
     <el-table class="table-responsive table-flush"
               header-row-class-name="thead-light"
               :data="rows">
-      <el-table-column label="Container Name" prop="id" width="200">
-        min-width="310px"
-        prop="name"
-        sortable>
+
+      <el-table-column label="Container Names"
+                       width="200"
+                        min-width="310px"
+                        prop="name"
+                        sortable>
         <template v-slot="{row}">
           <div class="media align-items-center">
-            <a href="#">
-              <span class="font-weight-600 name mb-0 text-sm">{{row.names[0]}}</span>
-            </a>
+              <li v-for="name in row.names" :key="name"  class="list-unstyled">
+                  <router-link :to="`containers/${name}`">
+                      <span class="font-weight-600 name mb-0 text-sm">
+                                        {{ name }}
+                      </span>
+                  </router-link>
+              </li>
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="Container ID"
-                       prop="budget"
-                       min-width="140px"
-                       sortable>
-                       <template v-slot="{row}">
-          {{ row.id }}
-          
         </template>
       </el-table-column>
 
       <el-table-column label="Status"
-                       min-width="170px"
+                       min-width="200px"
                        prop="status"
+                       width="250"
                        sortable>
         <template v-slot="{row}">
           <badge class="badge-dot mr-4" type="">
-            <i :class="`bg-${row.ports[0].type}`"></i>
+            <!--            <i :class="`bg-${row.ports[0].type}`"></i>-->
             <span class="status">{{row.status}}</span>
           </badge>
         </template>
       </el-table-column>
 
-      <el-table-column label="Image" min-width="190px">
-       <template v-slot="{row}">
+      <el-table-column label="Image"
+        sortable>
+        <template v-slot="{row}">
           {{ row.image }}
         </template>
       </el-table-column>
 
-      
-      <el-table-column min-width="180px">
-        <template v-slot="{row}">
-          <el-dropdown trigger="click" class="dropdown">
-                    <span class="btn btn-sm btn-icon-only text-light">
-                      <i class="fas fa-ellipsis-v mt-2"></i>
-                    </span>
-            <el-dropdown-menu class="dropdown-menu dropdown-menu-arrow show" slot="dropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </el-dropdown-menu>
-          </el-dropdown>
+
+      <el-table-column label="Container ID"
+                       prop="id"
+                       min-width="140px"
+                       sortable>
+                       <template v-slot="{row}">
+          {{ row.id }}
         </template>
       </el-table-column>
     </el-table>

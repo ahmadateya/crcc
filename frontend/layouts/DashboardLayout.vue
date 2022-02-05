@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <notifications></notifications>
+<!--    <notifications></notifications>-->
     <side-bar>
       <template slot-scope="props" slot="links">
         <sidebar-item

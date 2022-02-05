@@ -4,7 +4,8 @@
     <div class="scrollbar-inner" ref="sidebarScrollArea">
       <div class="sidenav-header d-flex justify-content-center">
         <a class="navbar-brand" href="#">
-          <img :src="logo" class="navbar-brand-img" alt="Sidebar logo" />
+                <b> CRCC</b>
+<!--          <img :src="logo" class="navbar-brand-img" alt="Sidebar logo" />-->
         </a>
       </div>
       <slot></slot>

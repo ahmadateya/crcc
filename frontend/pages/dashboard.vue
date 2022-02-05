@@ -5,10 +5,10 @@
     <div class="container-fluid mt--6">
       <div class="row">
         <div class="col">
-          <main-table v-if="containers.length!=0" :rows="containers"/>
+          <main-table v-if="containers.length!==0" :rows="containers"/>
           <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
           <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
-          <h2 v-else-if="loaded.length==0">No Running Containers</h2>
+          <h2 v-else-if="loaded.length===0">No Running Containers</h2>
         </div>
       </div>
     </div>
@@ -18,7 +18,6 @@
 import users from '~/components/tables/users'
 import LightTable from "~/components/tables/RegularTables/LightTable";
 import MainTable from "~/components/tables/RegularTables/MainTable";
-import TestOne from "~/components/TestOne"
 import http from 'http-proxy'
 import Jsona from 'jsona';
 const url = process.env.apiUrl;
@@ -28,7 +27,6 @@ export default {
   layout: 'DashboardLayout',
 
   components: {
-    TestOne,
     MainTable,
     // [Dropdown.name]: Dropdown,
     // [DropdownItem.name]: DropdownItem,
@@ -50,12 +48,12 @@ export default {
    // this.containers = await this.$axios.$get(`${url}/containers`);
      await this.$axios.get(`${url}/containers`)
          .then(response => {
-           if(response.status!=200){
+           if(response.status!==200){
              this.loaded.responseError=true;
              return;
            }
            this.containers=response.data;
-           if(this.containers.length==0){
+           if(this.containers.length===0){
              this.loaded.length=0;
            }
         }).catch(err=> {
