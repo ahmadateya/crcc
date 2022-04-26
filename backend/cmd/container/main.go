@@ -13,7 +13,12 @@ import (
 func ListContainers() string {
 	viper := config.NewViper()
 	url := fmt.Sprintf("%s:%s/containers/json", viper.App.Docker.Host, viper.App.Docker.Port)
+	fmt.Printf("================= url %+v \n", url)
+
 	response, err := http.Get(url)
+	fmt.Printf("================= %+v\n", response)
+	fmt.Printf("================= err %+v\n", err)
+
 	if err != nil {
 		return fmt.Sprintf("The HTTP request failed with error %s\n", err)
 	} else {
