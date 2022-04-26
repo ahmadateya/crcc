@@ -140,12 +140,19 @@
               </div>
             </div>
 
-            <bar-chart
+<!--            <bar-chart-->
+<!--                :height="350"-->
+<!--                ref="barChart"-->
+<!--                :chart-data="redBarChart.chartData"-->
+<!--            >-->
+<!--            </bar-chart>-->
+
+            <pie-chart
                 :height="350"
-                ref="barChart"
-                :chart-data="redBarChart.chartData"
+                ref="pieChart"
+                :chart-data="pieChart.chartData"
             >
-            </bar-chart>
+            </pie-chart>
           </card>
         </div>
       </div>
@@ -160,6 +167,7 @@
 import * as chartConfigs from "@/components/argon-core/Charts/config";
 import LineChart from "@/components/argon-core/Charts/LineChart";
 import BarChart from "@/components/argon-core/Charts/BarChart";
+import PieChart from "@/components/argon-core/Charts/PieChart";
 import StatsCard from "@/components/argon-core/Cards/StatsCard";
 
 // tables
@@ -176,6 +184,7 @@ export default {
     LineChart,
     BarChart,
     StatsCard,
+    PieChart,
   },
   data() {
     return {
@@ -202,6 +211,17 @@ export default {
         extraOptions: chartConfigs.blueChartOptions,
       },
       redBarChart: {
+        chartData: {
+          labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+              label: "Sales",
+              data: [25, 20, 30, 22, 17, 29],
+            },
+          ],
+        },
+      },
+      pieChart: {
         chartData: {
           labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [
