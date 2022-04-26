@@ -1,20 +1,120 @@
 <template>
   <div>
+    <!-- Base Header -->
     <base-header class="pb-6">
-    </base-header>
-    <div class="container-fluid mt--6">
+        <h6 class="h1 text-white">CRCC Dashboard</h6><hr/>
+
+      <!-- Card stats -->
       <div class="row">
-        <div class="col">
-          <main-table v-if="containers.length!==0" :rows="containers"/>
-          <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
-          <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
-          <h2 v-else-if="loaded.length===0">No Running Containers</h2>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+              title="Total Containers"
+              type="gradient-blue"
+              :sub-title="containers.length"
+              icon="ni ni-chart-pie-35"
+          >
+          </stats-card>
         </div>
       </div>
+    </base-header>
+    <!-- End Base Header -->
+
+    <!--  Main Section in the Page  -->
+    <div class="container-fluid">
+      <div class="container mt--6 ">
+        <!-- Containers Table-->
+        <div class="row">
+          <div class="col-xl-8">
+            <main-table v-if="containers.length!==0" :rows="containers"/>
+            <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
+            <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
+            <h2 v-else-if="loaded.length===0">No Running Containers</h2>
+          </div>
+
+          <!--  Pie chart   -->
+          <div class="col-xl-4">
+            <card header-classes="bg-transparent">
+              <div slot="header" class="row align-items-center">
+                <div class="col">
+<!--                  <h6 class="text-uppercase text-muted ls-1 mb-1">Operating Systems</h6>-->
+                  <h5 class="h3 mb-0">Operating Systems</h5>
+                </div>
+              </div>
+              <pie-chart
+                  :height="350"
+                  ref="pieChart"
+                  :chart-data="pieChart.chartData"
+              >
+              </pie-chart>
+            </card>
+          </div>
+          <!--  end Pie chart   -->
+
+
+        </div>
+        <!-- End Containers Table-->
+
+        <!--Charts-->
+<!--        <div class="row">-->
+<!--          <div class="col-xl-8">-->
+<!--            <card type="default" header-classes="bg-transparent">-->
+<!--              <div slot="header" class="row align-items-center">-->
+<!--                <div class="col">-->
+<!--                  <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>-->
+<!--                  <h5 class="h3 text-white mb-0">Sales value</h5>-->
+<!--                </div>-->
+<!--                <div class="col">-->
+<!--                  <ul class="nav nav-pills justify-content-end">-->
+<!--                    <li class="nav-item mr-2 mr-md-0">-->
+<!--                      <a-->
+<!--                          class="nav-link py-2 px-3"-->
+<!--                          href="#"-->
+<!--                          :class="{ active: bigLineChart.activeIndex === 0 }"-->
+<!--                          @click.prevent="initBigChart(0)"-->
+<!--                      >-->
+<!--                        <span class="d-none d-md-block">Month</span>-->
+<!--                        <span class="d-md-none">M</span>-->
+<!--                      </a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                      <a-->
+<!--                          class="nav-link py-2 px-3"-->
+<!--                          href="#"-->
+<!--                          :class="{ active: bigLineChart.activeIndex === 1 }"-->
+<!--                          @click.prevent="initBigChart(1)"-->
+<!--                      >-->
+<!--                        <span class="d-none d-md-block">Week</span>-->
+<!--                        <span class="d-md-none">W</span>-->
+<!--                      </a>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <line-chart-->
+<!--                  :height="350"-->
+<!--                  ref="bigChart"-->
+<!--                  :chart-data="bigLineChart.chartData"-->
+<!--                  :extra-options="bigLineChart.extraOptions"-->
+<!--              >-->
+<!--              </line-chart>-->
+<!--            </card>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- End charts-->
+      </div>
     </div>
+    <!--  End Main Section in the Page  -->
   </div>
 </template>
 <script>
+// Charts
+import * as chartConfigs from "@/components/argon-core/Charts/config";
+import LineChart from "@/components/argon-core/Charts/LineChart";
+import BarChart from "@/components/argon-core/Charts/BarChart";
+import PieChart from "@/components/argon-core/Charts/PieChart";
+import StatsCard from "@/components/argon-core/Cards/StatsCard";
+
+// tables
 import MainTable from "~/components/tables/RegularTables/MainTable";
 import Jsona from 'jsona';
 const url = process.env.apiUrl;
@@ -25,12 +125,57 @@ export default {
 
   components: {
     MainTable,
+    LineChart,
+    BarChart,
+    StatsCard,
+    PieChart,
   },
   data() {
     return {
+      // containers related data
       containers: [],
       loaded:{},
-      valid:true
+      valid:true,
+      // charts related data
+      bigLineChart: {
+        allData: [
+          [0, 20, 10, 30, 15, 40, 20, 60, 60],
+          [0, 20, 5, 25, 10, 30, 15, 40, 40],
+        ],
+        activeIndex: 0,
+        chartData: {
+          datasets: [
+            {
+              label: "Performance",
+              data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
+            },
+          ],
+          labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        },
+        extraOptions: chartConfigs.blueChartOptions,
+      },
+      redBarChart: {
+        chartData: {
+          labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+              label: "Sales",
+              data: [25, 20, 30, 22, 17, 29],
+            },
+          ],
+        },
+      },
+      pieChart: {
+        chartData: {
+          labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+              label: "Sales",
+              data: [25, 20, 30, 22, 17, 29],
+            },
+          ],
+        },
+      },
     }
   },
   async fetch() {
@@ -60,5 +205,23 @@ export default {
   //   });
   //   }
   // }
+  methods: {
+    initBigChart(index) {
+      let chartData = {
+        datasets: [
+          {
+            label: "Performance",
+            data: this.bigLineChart.allData[index],
+          },
+        ],
+        labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      };
+      this.bigLineChart.chartData = chartData;
+      this.bigLineChart.activeIndex = index;
+    },
+  },
+  mounted() {
+    this.initBigChart(0);
+  },
 };
 </script>

@@ -3,7 +3,6 @@ package container
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/ahmadateya/crcc/api/analysis"
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
@@ -56,7 +55,7 @@ func ListFileChanges(c *gin.Context) {
 	if err != nil {
 		c.JSON(404, err.Error())
 	}
-	
+
 	malFiles, err:=analysis.FileAnalysisByName(&data)
 	if err !=nil {
 		c.JSON(404, err.Error())
@@ -91,4 +90,8 @@ func ListNetworks(c *gin.Context) {
 	}
 	containerPkg.ListContainerFilesChangesSecondVersion(containerId)
 	c.JSON(200, data["NetworkSettings"])
+}
+
+func Scan(c *gin.Context) {
+	// TODO:: trigger the scan
 }
