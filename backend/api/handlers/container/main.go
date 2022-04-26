@@ -30,12 +30,5 @@ func Show(c *gin.Context) {
 }
 
 func Scan(c *gin.Context) {
-	containerName := c.Param("container")
-	container := containerPkg.GetContainerInfo(containerName)
-	var data models.Container
-	err := json.Unmarshal([]byte(container), &data)
-	if err != nil {
-		c.JSON(404, err.Error())
-	}
-	c.JSON(200, data)
+	// TODO:: trigger the scan
 }
