@@ -4,7 +4,17 @@
     </base-header>
     <div class="container-fluid mt--6">
       <div class="row">
-        <div class="col">
+        <div class="col-xl-12">
+          <div class="border-0 card-header">
+            <div class="row">
+              <div class="col-xl-10">
+                <h1 class="mb-0 bold ">{{container.name}} </h1>
+              </div>
+              <div class="col-xl-2">
+                <base-button size="lg">Scan</base-button>
+             </div>
+            </div>
+          </div>
           <view-container :container="container"/>
         </div>
       </div>
