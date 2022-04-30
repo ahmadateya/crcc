@@ -6,6 +6,7 @@ type ListContainer struct {
 	Image  string   `json:"image"`
 	Status string   `json:"status"`
 	Ports  []Port   `json:"ports"`
+	NetworkSettings interface{} `json:"networksettings"`
 }
 
 type Port struct {
