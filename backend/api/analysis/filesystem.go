@@ -33,12 +33,10 @@ func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo,error){
 	}
 
 	for _,file := range *files{
-		for malFile,mal := range currentMalFiles{
-			path:=strings.Split(file.Path, "/")
-			if malFile == path[len(path)-1] && mal{
+		path:=strings.Split(file.Path, "/")
+			if currentMalFiles[path[len(path)-1]] {
 				malFiles = append(malFiles, models.FileInfo{Path: file.Path,Kind: file.Kind})
 			}
-		}
 	}
 	
 	return malFiles,nil
