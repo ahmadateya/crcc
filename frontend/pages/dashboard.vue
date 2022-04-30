@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Base Header -->
-    <base-header class="pb-6" type="blue">
+    <base-header class="pb-6" type="black">
         <h1 class="h1 text-black" style="text-align: center;">CRCC Dashboard</h1><hr/>
 
       <!-- Card stats -->
