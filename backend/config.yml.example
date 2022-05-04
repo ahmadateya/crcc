@@ -11,4 +11,4 @@ server:
 app:
   docker:
     host: 'http://172.17.0.1'
-    port: '6666'
+    port: '5555'

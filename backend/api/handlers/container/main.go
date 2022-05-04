@@ -2,8 +2,7 @@ package container
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/ahmadateya/crcc/api/analysis"
+
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
 	"github.com/gin-gonic/gin"
@@ -34,7 +33,7 @@ func Show(c *gin.Context) {
 }
 
 
-func ListProcesses(c *gin.Context) {
+/*func ListProcesses(c *gin.Context) {
 	containerId := c.Param("container")
 	container := containerPkg.ListContainerProcesses(containerId,"")
 	fmt.Println(container)
@@ -46,8 +45,8 @@ func ListProcesses(c *gin.Context) {
 	}
 	c.JSON(200, data)
 }
-
-func ListFileChanges(c *gin.Context) {
+*/
+/*func ListFileChanges(c *gin.Context) {
 	containerName := c.Param("container")
 	container := containerPkg.ListContainerFilesChanges(containerName)
 	var data []models.FileInfo
@@ -77,7 +76,7 @@ func ListFileChangesWithNameVersionTwo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, malFiles)
-}
+}*/
 
 func ListNetworks(c *gin.Context) {
 	containerId := c.Param("container")

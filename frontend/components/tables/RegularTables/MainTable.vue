@@ -46,6 +46,13 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="ID"
+        sortable>
+        <template v-slot="{row}">
+          {{ row.id }}
+        </template>
+      </el-table-column>
+
 
 <!--      <el-table-column label="Container ID"-->
 <!--                       prop="id"-->
