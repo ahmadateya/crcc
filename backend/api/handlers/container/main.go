@@ -94,15 +94,8 @@ func ListNetworks(c *gin.Context) {
 
 func Scan(c *gin.Context) {
 	containerId := c.Param("container")
-	// get container files
-	containerFiles, err := containerPkg.ListContainerFilesChangesSecondVersion(containerId)
-	fmt.Printf("================ containerFiles: %s\n", containerFiles)
-	if err != nil {
-		c.JSON(500, err.Error())
-		return
-	}
-	// search for malicious files
-	malFiles, err := analysis.FileAnalysisByNameVersionTwo(containerFiles)
+	// apply file analysis to the container
+	malFiles, err := applyFileSystemAnalysis(containerId)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
