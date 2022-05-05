@@ -10,6 +10,13 @@ import (
 )
 
 
+type MalProcesses struct{
+	Cmd string `json:"cmd"`
+	User string `json:"user"`
+	Type byte `json:"type"`
+	Applied bool `json:"applied"`
+}
+
 func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,error){
 
     var malProcesses [][]string
@@ -24,7 +31,7 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,
     
 	jsonData, _:=ioutil.ReadAll(file)
 
-	var currentMalProcesses map[string]bool
+	var currentMalProcesses []MalProcesses
     
 	err = json.Unmarshal([]byte(jsonData),&currentMalProcesses)
 
@@ -33,14 +40,26 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,
 	}
 
 	for _,process := range processes.Processes{
-		for malProcess,mal := range currentMalProcesses{
-			re,_ := regexp.Compile(malProcess)
+		for _,malProcess := range currentMalProcesses{
+			re,_ := regexp.Compile(malProcess.Cmd)
 			match := re.FindStringIndex(process[len(process)-1])
-			if  mal && len(match) !=0{
-				malProcesses = append(malProcesses,process)
+			if  malProcess.Applied && len(match) !=0{
+				checkProcessTypeScan(&malProcess,&malProcesses,&process)
 			}
 		}
 	}
 
+
+
 	return malProcesses,nil
+}
+
+func checkProcessTypeScan(malProcess *MalProcesses,malProcesses *[][]string,process *[]string){
+	if malProcess.Type == 0{
+					(*malProcesses) = append((*malProcesses),*process)
+				}else if malProcess.Type == 1{
+					if malProcess.User != (*process)[0]{
+						(*malProcesses) = append((*malProcesses),*process)
+					}
+				}
 }

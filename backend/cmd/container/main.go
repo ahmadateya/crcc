@@ -58,7 +58,6 @@ func ListContainerProcesses(containerId string, ps_args string) string {
 	}
 }
 
-
 func ListContainerFilesChanges(containerId string) string {
 	viper := config.NewViper()
 	url := fmt.Sprintf("%s:%s/containers/%s/changes", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
@@ -83,10 +82,10 @@ func ListContainerNetworks(containerId string) string {
 	}
 }
 
-func ListContainerFilesChangesSecondVersion(containerId string) (string,error){
+func ListContainerFilesChangesSecondVersion(containerId string) (string, error) {
 	viper := config.NewViper()
 	urlForCreatingExec := fmt.Sprintf("%s:%s/containers/%s/exec", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
-	createExecRequestData:=[]byte(`{
+	createExecRequestData := []byte(`{
   "AttachStdin": false,
   "AttachStdout": true,
   "AttachStderr": true,
@@ -102,29 +101,29 @@ func ListContainerFilesChangesSecondVersion(containerId string) (string,error){
   ]
 }`)
 
-    startExecRequestData:=[]byte(`{
+	startExecRequestData := []byte(`{
   "Detach": false,
   "Tty": false
 }`)
-	response, err := http.Post(urlForCreatingExec,"application/json", bytes.NewBuffer(createExecRequestData))
-	
+	response, err := http.Post(urlForCreatingExec, "application/json", bytes.NewBuffer(createExecRequestData))
+
 	if err != nil {
-		return "",err
+		return "", err
 	}
 	defer response.Body.Close()
-    
+
 	body, _ := ioutil.ReadAll(response.Body)
 	var requestData models.CreateExec
-	json.Unmarshal([]byte(body),&requestData)
+	json.Unmarshal([]byte(body), &requestData)
 
-	urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port,requestData.Id)
-	response, err=http.Post(urlForStartingExec,"application/json",bytes.NewBuffer(startExecRequestData))
+	urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port, requestData.Id)
+	response, err = http.Post(urlForStartingExec, "application/json", bytes.NewBuffer(startExecRequestData))
 
-	if err!=nil{
-		return "",err
+	if err != nil {
+		return "", err
 	}
-    defer response.Body.Close()
-	body,_=ioutil.ReadAll(response.Body)
-    
-	return string(body),nil
+	defer response.Body.Close()
+	body, _ = ioutil.ReadAll(response.Body)
+
+	return string(body), nil
 }

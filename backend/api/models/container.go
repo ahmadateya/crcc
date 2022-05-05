@@ -22,3 +22,13 @@ type Container struct {
 	Created string `json:"created"`
 	Name    string `json:"name"`
 }
+
+
+type FileInfo struct {
+	Path string `json:"path"`
+	Kind int `json:"Kind"`
+}
+
+type ContainerProcesses struct {
+	Processes [][]string
+}

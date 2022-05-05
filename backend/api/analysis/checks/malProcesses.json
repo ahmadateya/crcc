@@ -1,3 +1,8 @@
-{
-    
-}
+[
+    {
+        "Cmd":"npm",
+        "User":"root",
+        "Type": "both",
+        "Applied": true
+    }
+]
