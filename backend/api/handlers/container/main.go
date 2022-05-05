@@ -93,5 +93,19 @@ func ListNetworks(c *gin.Context) {
 }
 
 func Scan(c *gin.Context) {
-	// TODO:: trigger the scan
+	containerId := c.Param("container")
+	// get container files
+	containerFiles, err := containerPkg.ListContainerFilesChangesSecondVersion(containerId)
+	fmt.Printf("================ containerFiles: %s\n", containerFiles)
+	if err != nil {
+		c.JSON(500, err.Error())
+		return
+	}
+	// search for malicious files
+	malFiles, err := analysis.FileAnalysisByNameVersionTwo(containerFiles)
+	if err != nil {
+		c.JSON(500, err.Error())
+		return
+	}
+	c.JSON(200, malFiles)
 }

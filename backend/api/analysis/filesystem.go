@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -9,76 +10,73 @@ import (
 	"github.com/ahmadateya/crcc/api/models"
 )
 
-func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo,error){
-    
-	
-	var malFiles []models.FileInfo
-	
-    getCurrentPath, _:=os.Getwd()
-	file, err:= os.Open(getCurrentPath+"/api/analysis/checks/malfilenames.json")
+func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo, error) {
 
-	if err != nil{
-		return nil,err
+	var malFiles []models.FileInfo
+
+	getCurrentPath, _ := os.Getwd()
+	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
+
+	if err != nil {
+		return nil, err
 	}
 	defer file.Close()
-    
-	jsonData, _:=ioutil.ReadAll(file)
+
+	jsonData, _ := ioutil.ReadAll(file)
 
 	var currentMalFiles map[string]bool
-    
-	err = json.Unmarshal([]byte(jsonData),&currentMalFiles)
-    
-	if err != nil{
-		return nil,err
+
+	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
+
+	if err != nil {
+		return nil, err
 	}
 
-	for _,file := range *files{
-		path:=strings.Split(file.Path, "/")
-			if currentMalFiles[path[len(path)-1]] {
-				malFiles = append(malFiles, models.FileInfo{Path: file.Path,Kind: file.Kind})
-			}
+	for _, file := range *files {
+		path := strings.Split(file.Path, "/")
+		if currentMalFiles[path[len(path)-1]] {
+			malFiles = append(malFiles, models.FileInfo{Path: file.Path, Kind: file.Kind})
+		}
 	}
-	
-	return malFiles,nil
+
+	return malFiles, nil
 
 }
 
-func FileAnalysisByNameVersionTwo(files string)([]models.FileInfo,error){
+func FileAnalysisByNameVersionTwo(files string) ([]models.FileInfo, error) {
 	var fullPath []string
 	var malFiles []models.FileInfo
 
-	fullPath=strings.Split(files,"\n")
-    
-	
-    
-    
+	fullPath = strings.Split(files, "\n")
 
-    getCurrentPath, _:=os.Getwd()
-	file, err:= os.Open(getCurrentPath+"/api/analysis/checks/malfilenames.json")
+	getCurrentPath, _ := os.Getwd()
+	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
-	if err != nil{
-		return nil,err
+	fmt.Printf("=================================== %+v\n", file)
+	if err != nil {
+		return nil, err
 	}
 	defer file.Close()
-    
-	jsonData, _:=ioutil.ReadAll(file)
+
+	jsonData, _ := ioutil.ReadAll(file)
 
 	var currentMalFiles map[string]bool
-    
-	err = json.Unmarshal([]byte(jsonData),&currentMalFiles)
-    
-	if err != nil{
-		return nil,err
+
+	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
+
+	if err != nil {
+		return nil, err
 	}
 
-	for _,file:= range fullPath{
-		for malFile,mal := range currentMalFiles{
-			path:=strings.Split(file, "/")
-			if mal && malFile == path[len(path)-1]{
-				malFiles = append(malFiles, models.FileInfo{Path: file,Kind: 0})
+	for _, file := range fullPath {
+		for malFile, mal := range currentMalFiles {
+			path := strings.Split(file, "/")
+			if mal && malFile == path[len(path)-1] {
+				malFiles = append(malFiles, models.FileInfo{Path: file, Kind: 0})
 			}
 		}
 	}
-	
-	return malFiles,nil
+
+	fmt.Printf("=================================== %+v\n", malFiles)
+	return malFiles, nil
 }
