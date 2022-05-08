@@ -28,24 +28,32 @@
           <h2 v-if="loaded.error">Error while fetching data please request it again.</h2>
           <h2 v-else-if="loaded.responseError">Please make sure of allowing the Rest API.</h2>
           <loading-bar></loading-bar>
-          <h2 v-if="isScanned">Scanned</h2>
-          <div>
+          <div v-if="isScanned" class="col-xl-3 col-md-3">
+            <h2>
+              <i class="ni ni-chart-bar-32"></i> <span> Scan Results</span>
+            </h2>
             <!-- Via multiple directive modifiers -->
-            <b-button v-b-toggle.collapse-a.collapse-b>Toggle Collapse A and B</b-button>
-
-            <!-- Via space separated string of IDs passed to directive value -->
-            <b-button v-b-toggle="'collapse-a collapse-b'">Toggle Collapse A and B</b-button>
-
-            <!-- Via array of string IDs passed to directive value -->
-            <b-button v-b-toggle="['collapse-a', 'collapse-b']">Toggle Collapse A and B</b-button>
-
-            <!-- Elements to collapse -->
-            <b-collapse id="collapse-a" class="mt-2">
-              <b-card>I am collapsible content A!</b-card>
-            </b-collapse>
-            <b-collapse id="collapse-b" class="mt-2">
-              <b-card>I am collapsible content B!</b-card>
-            </b-collapse>
+            <div class="element"
+                 v-for="(result, index) in scanData.results"
+            >
+              <b-button v-b-toggle="'collapse-' + index + '-details'"
+                        :id="'collapse-' + index"
+                        class="align-left"
+                        v-bind:class="[result.passed ? 'text-success' : 'passed text-danger' ]"
+              >
+                <i v-if="result.passed" class="ni ni-check-bold"></i>
+                <i v-else class="ni ni-fat-remove"></i>
+                {{result.name}}
+              </b-button>
+              <div v-if="result.details !== ''">
+                <b-collapse :id="'collapse-' + index + '-details'" class="mt-2">
+                  <b-card-text>
+<!--       TODO needs a reformat; for example display the details in separate lines/points ..etc             -->
+                    {{ result.details }}
+                  </b-card-text>
+                </b-collapse>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -55,6 +63,8 @@
 <script>
 import LoadingBar from "~/components/LoadingBar";
 import ViewContainer from "~/components/ViewContainer";
+import { BIcon } from 'bootstrap-vue'
+
 import Jsona from 'jsona';
 const url = process.env.apiUrl;
 const jsona = new Jsona();
@@ -63,6 +73,7 @@ export default {
   layout: 'DashboardLayout',
 
   components: {
+    BIcon,
     ViewContainer,
     LoadingBar,
   },
@@ -72,7 +83,20 @@ export default {
       loaded:{},
       valid:true,
       isScanned:false,
-      scanData: {}
+      scanData: {
+        results: [
+          {
+            name: 'xxxxxx',
+            passed: true,
+            details: '',
+          },
+          {
+            name: 'yyyyyy',
+            passed: false,
+            details: 'qwqwqwqwq',
+          },
+        ]
+      }
     }
   },
   async fetch() {
@@ -100,7 +124,7 @@ export default {
             this.loaded.responseError=true;
             return;
           }
-          this.scanData = response.data;
+          // this.scanData = response.data;
           this.isScanned = true;
           this.$nuxt.$loading.finish()
         }).catch(err=> {
@@ -110,3 +134,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.element {
+  margin-bottom: 5px;
+  display: block;
+}
+</style>
