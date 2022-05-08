@@ -1,0 +1,9 @@
+version: "3.5"
+services:
+  malfile-project:
+    build: malfile-example
+    container_name: project-with-malfile
+    volumes:
+      - ./malfile-example:/app
+    command: sh entrypoint.sh
+

@@ -3,8 +3,8 @@ package container
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/ahmadateya/crcc/api/analysis"
+
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
 	"github.com/gin-gonic/gin"
@@ -34,10 +34,9 @@ func Show(c *gin.Context) {
 	c.JSON(200, data)
 }
 
-
 func ListProcesses(c *gin.Context) {
 	containerId := c.Param("container")
-	container := containerPkg.ListContainerProcesses(containerId,"")
+	container := containerPkg.ListContainerProcesses(containerId, "")
 	fmt.Println(container)
 	var data models.ContainerProcesses
 	err := json.Unmarshal([]byte(container), &data)
@@ -56,9 +55,9 @@ func ListFileChanges(c *gin.Context) {
 	if err != nil {
 		c.JSON(404, err.Error())
 	}
-	
-	malFiles, err:=analysis.FileAnalysisByName(&data)
-	if err !=nil {
+
+	malFiles, err := analysis.FileAnalysisByName(&data)
+	if err != nil {
 		c.JSON(404, err.Error())
 		return
 	}
@@ -67,13 +66,13 @@ func ListFileChanges(c *gin.Context) {
 
 func ListFileChangesWithNameVersionTwo(c *gin.Context) {
 	containerId := c.Param("container")
-	container,err := containerPkg.ListContainerFilesChangesSecondVersion(containerId)
-	if err !=nil {
+	container, err := containerPkg.ListContainerFilesChangesSecondVersion(containerId)
+	if err != nil {
 		c.JSON(404, err.Error())
 		return
 	}
-	malFiles, err:=analysis.FileAnalysisByNameVersionTwo(container)
-	if err !=nil {
+	malFiles, err := analysis.FileAnalysisByNameVersionTwo(container)
+	if err != nil {
 		c.JSON(404, err.Error())
 		return
 	}
@@ -91,4 +90,15 @@ func ListNetworks(c *gin.Context) {
 	}
 	containerPkg.ListContainerFilesChangesSecondVersion(containerId)
 	c.JSON(200, data["NetworkSettings"])
+}
+
+func Scan(c *gin.Context) {
+	containerId := c.Param("container")
+	// apply file analysis to the container
+	malFiles, err := applyFileSystemAnalysis(containerId)
+	if err != nil {
+		c.JSON(500, err.Error())
+		return
+	}
+	c.JSON(200, malFiles)
 }

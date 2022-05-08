@@ -46,15 +46,22 @@
         </template>
       </el-table-column>
 
-
-      <el-table-column label="Container ID"
-                       prop="id"
-                       min-width="140px"
-                       sortable>
-                       <template v-slot="{row}">
+      <el-table-column label="ID"
+        sortable>
+        <template v-slot="{row}">
           {{ row.id }}
         </template>
       </el-table-column>
+
+
+<!--      <el-table-column label="Container ID"-->
+<!--                       prop="id"-->
+<!--                       min-width="140px"-->
+<!--                       sortable>-->
+<!--                       <template v-slot="{row}">-->
+<!--          {{ row.id }}-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
   </div>
 </template>

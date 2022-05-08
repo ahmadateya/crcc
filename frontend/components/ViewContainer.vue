@@ -1,8 +1,8 @@
 <template>
   <div class="card">
-    <div class="border-0 card-header">
-      <h1 class="mb-0 bold ">Container {{container.name}} </h1>
-    </div>
+<!--    <div class="border-0 card-header">-->
+<!--      <h1 class="mb-0 bold ">{{container.name}} </h1>-->
+<!--    </div>-->
     <table class="table table-bordered">
       <tbody>
       <tr>

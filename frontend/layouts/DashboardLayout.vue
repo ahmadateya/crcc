@@ -71,9 +71,9 @@
       </template>
     </side-bar>
     <div class="main-content">
-      <dashboard-navbar
-        :type="$route.name === 'alternative' ? 'light' : 'default'"
-      ></dashboard-navbar>
+      <!--<dashboard-navbar
+        :type="$route.name === 'alternative' ? 'light' : 'blue'"
+      ></dashboard-navbar>-->
 
       <div @click="$sidebar.displaySidebar(false)">
         <nuxt></nuxt>

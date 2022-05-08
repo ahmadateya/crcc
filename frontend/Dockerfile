@@ -1,12 +1,8 @@
-FROM node:11.13.0-alpine
+FROM node:11.13.0
 
 # create destination directory
 RUN mkdir -p /frontend
 WORKDIR /frontend
-
-# update and install dependency
-RUN apk update && apk upgrade
-RUN apk add git
 
 # copy the app, note .dockerignore
 COPY . /frontend/
