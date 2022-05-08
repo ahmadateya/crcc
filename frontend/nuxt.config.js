@@ -44,7 +44,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION",
+    title: "Container Runtime Compliance Checker",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
