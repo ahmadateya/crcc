@@ -2,7 +2,7 @@
     {
         "Cmd":"npm",
         "User":"root",
-        "Type": "both",
+        "Type": 0,
         "Applied": true
     }
 ]
