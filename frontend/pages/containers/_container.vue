@@ -43,7 +43,7 @@
               >
                 <i v-if="result.passed" class="ni ni-check-bold"></i>
                 <i v-else class="ni ni-fat-remove"></i>
-                {{result.name}}
+                {{result.title}}
               </b-button>
               <div v-if="result.details !== ''">
                 <b-collapse :id="'collapse-' + index + '-details'" class="mt-2">
@@ -86,15 +86,10 @@ export default {
       scanData: {
         results: [
           {
-            name: 'xxxxxx',
+            title: '',
             passed: true,
             details: '',
-          },
-          {
-            name: 'yyyyyy',
-            passed: false,
-            details: 'qwqwqwqwq',
-          },
+          }
         ]
       }
     }
@@ -124,7 +119,7 @@ export default {
             this.loaded.responseError=true;
             return;
           }
-          // this.scanData = response.data;
+          this.scanData = response.data;
           this.isScanned = true;
           this.$nuxt.$loading.finish()
         }).catch(err=> {
