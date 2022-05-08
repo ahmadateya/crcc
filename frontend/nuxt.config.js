@@ -147,11 +147,13 @@ module.exports = {
       }
     ]
   },
+  components: true,
 
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: "#fff" },
+  loading: '~/components/LoadingBar.vue',
+
 
   /*
    ** Global CSS
@@ -183,8 +185,18 @@ module.exports = {
     "@nuxtjs/axios",
     "@nuxtjs/pwa",
     "@nuxtjs/auth",
-    "@nuxtjs/toast"
+    "@nuxtjs/toast",
+    // Doc: https://bootstrap-vue.js.org/docs/
+    "bootstrap-vue/nuxt",
   ],
+  /*
+  ** Disabling Bootstrap Compiled CSS
+  */
+  bootstrapVue: {
+    bootstrapCSS: false,
+    bootstrapVueCSS: false
+  },
+
   /*
    ** Auth module configuration
    ** See https://auth.nuxtjs.org/schemes/local.html#options
