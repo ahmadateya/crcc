@@ -40,9 +40,9 @@ export default {
   display: inline-block;
   width: 5rem;
   height: 5rem;
-  border: 10px solid rgba(9, 133, 81, 0.705);
+  border: 10px solid rgba(36,150,237,255);
   border-radius: 50%;
-  border-top-color: #158876;
+  border-top-color: #2854a2;
   animation: spin 1s ease-in-out infinite;
 }
 

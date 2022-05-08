@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :class="{[`bg-${type}`]: type}">
+  <div class="header main-color">
     <div class="container-fluid">
       <div class="header-body">
         <slot></slot>
@@ -20,4 +20,7 @@
   }
 </script>
 <style>
+.main-color {
+  background-color: #2496ed;
+}
 </style>
