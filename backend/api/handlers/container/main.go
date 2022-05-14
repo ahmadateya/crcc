@@ -94,11 +94,13 @@ func ListNetworks(c *gin.Context) {
 
 func Scan(c *gin.Context) {
 	containerId := c.Param("container")
-	// apply file analysis to the container
-	malFiles, err := applyFileSystemAnalysis(containerId)
+	var scanResponse models.ScanDataResponse
+	// apply filesystem analysis to the container
+	fileSystemScan, err := applyFileSystemAnalysis(containerId)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
 	}
-	c.JSON(200, malFiles)
+	scanResponse.Results = append(scanResponse.Results, fileSystemScan)
+	c.JSON(200, scanResponse)
 }

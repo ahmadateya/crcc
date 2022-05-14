@@ -1,8 +1,12 @@
 <template>
   <div>
     <!-- Base Header -->
-    <base-header class="pb-6" type="black">
-        <h1 class="h1 text-black" style="text-align: center;">CRCC Dashboard</h1><hr/>
+    <base-header class="pb-6">
+      <h1 class="h1"
+          style="font-size: 2.5rem;
+                  font-weight: 700; padding: 10px; color: black; text-align: center">
+        Container Runtime Compliance Checker
+      </h1>
 
       <!-- Card stats -->
       <div class="row">

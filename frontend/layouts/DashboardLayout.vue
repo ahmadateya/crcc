@@ -12,49 +12,49 @@
         >
         </sidebar-item>
 
-        <sidebar-item
-          opened
-          :link="{
-            name: 'Examples (API)',
-            icon: 'fab fa-vuejs',
-          }"
-        >
-          <sidebar-item
-            opened
-            :link="{ name: 'User Profile', path: '/examples/user-profile' }"
-          />
-          <sidebar-item
-            opened
-            :link="{
-              name: 'User Management',
-              path: '/examples/user-management',
-            }"
-          />
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: 'Icons',
-            path: '/components/icons',
-            icon: 'ni ni-planet',
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'Tables',
-            icon: 'ni ni-align-left-2 text-default',
-            path: '/tables/regular',
-          }"
-        >
-        </sidebar-item>
+<!--        <sidebar-item-->
+<!--          opened-->
+<!--          :link="{-->
+<!--            name: 'Examples (API)',-->
+<!--            icon: 'fab fa-vuejs',-->
+<!--          }"-->
+<!--        >-->
+<!--          <sidebar-item-->
+<!--            opened-->
+<!--            :link="{ name: 'User Profile', path: '/examples/user-profile' }"-->
+<!--          />-->
+<!--          <sidebar-item-->
+<!--            opened-->
+<!--            :link="{-->
+<!--              name: 'User Management',-->
+<!--              path: '/examples/user-management',-->
+<!--            }"-->
+<!--          />-->
+<!--        </sidebar-item>-->
+<!--        <sidebar-item-->
+<!--          :link="{-->
+<!--            name: 'Icons',-->
+<!--            path: '/components/icons',-->
+<!--            icon: 'ni ni-planet',-->
+<!--          }"-->
+<!--        />-->
+<!--        <sidebar-item-->
+<!--          :link="{-->
+<!--            name: 'Tables',-->
+<!--            icon: 'ni ni-align-left-2 text-default',-->
+<!--            path: '/tables/regular',-->
+<!--          }"-->
+<!--        >-->
+<!--        </sidebar-item>-->
 
-        <sidebar-item
-          :link="{
-            name: 'Google',
-            icon: 'ni ni-pin-3',
-            path: '/maps/google',
-          }"
-        >
-        </sidebar-item>
+<!--        <sidebar-item-->
+<!--          :link="{-->
+<!--            name: 'Google',-->
+<!--            icon: 'ni ni-pin-3',-->
+<!--            path: '/maps/google',-->
+<!--          }"-->
+<!--        >-->
+<!--        </sidebar-item>-->
 
         <hr
           class="my-3"
