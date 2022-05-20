@@ -1,0 +1,17 @@
+[
+    {
+        "Port":"4156",
+        "Description":"Linux.Slapper.Worm family of worms potentialy running on this port",
+        "Impact":"High"
+    },
+    {
+      "Port": "7222",
+      "Description": "Lupper worm potentialy running on this port",
+      "Impact": "High"
+    },
+{
+  "Port": "23432",
+  "Description": "Asylum trojan maybe running on this port",
+  "Impact": "High"
+}
+]

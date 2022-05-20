@@ -9,17 +9,13 @@ import (
 	"github.com/ahmadateya/crcc/api/models"
 )
 
+//The process.type here is for checking if the user wants to check the process.cmd it self or he just wants to see
+// if the current command is running under a certain user
 
-type MalProcesses struct{
-	Cmd string `json:"cmd"`
-	User string `json:"user"`
-	Type byte `json:"type"`
-	Applied bool `json:"applied"`
-}
 
-func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,error){
+func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([]models.ContainerProcess,error){
 
-    var malProcesses [][]string
+    var malProcesses []models.ContainerProcess
 
 	getCurrentPath, _:=os.Getwd()
 	file, err:= os.Open(getCurrentPath+"/api/analysis/checks/malfilenames.json")
@@ -31,7 +27,7 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,
     
 	jsonData, _:=ioutil.ReadAll(file)
 
-	var currentMalProcesses []MalProcesses
+	var currentMalProcesses []models.ContainerProcess
     
 	err = json.Unmarshal([]byte(jsonData),&currentMalProcesses)
 
@@ -54,12 +50,26 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([][]string,
 	return malProcesses,nil
 }
 
-func checkProcessTypeScan(malProcess *MalProcesses,malProcesses *[][]string,process *[]string){
+func checkProcessTypeScan(malProcess *models.ContainerProcess,malProcesses *[]models.ContainerProcess,process *[]string){
 	if malProcess.Type == 0{
-					(*malProcesses) = append((*malProcesses),*process)
+					(*malProcesses) = append((*malProcesses),models.ContainerProcess{
+						Cmd: (*process)[7],
+						User: (*process)[0],
+						Type: malProcess.Type,
+						Applied: malProcess.Applied,
+						Description: malProcess.Description,
+						Impact: malProcess.Impact,
+					})
 				}else if malProcess.Type == 1{
 					if malProcess.User != (*process)[0]{
-						(*malProcesses) = append((*malProcesses),*process)
+						(*malProcesses) = append((*malProcesses),models.ContainerProcess{
+						Cmd: (*process)[7],
+						User: (*process)[0],
+						Type: malProcess.Type,
+						Applied: malProcess.Applied,
+						Description: malProcess.Description,
+						Impact: malProcess.Impact,
+					})
 					}
 				}
 }
