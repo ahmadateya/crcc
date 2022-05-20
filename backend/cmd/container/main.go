@@ -127,3 +127,93 @@ func ListContainerFilesChangesSecondVersion(containerId string) (string, error) 
 
 	return string(body), nil
 }
+
+
+func ListContainerOpenPorts(containerId string) (string, error) {
+       
+        command := []byte(`{
+  "AttachStdin": false,
+  "AttachStdout": true,
+  "AttachStderr": true,
+  "DetachKeys": "ctrl-p,ctrl-q",
+  "Tty": false,
+  "Cmd": [
+    "netstat",
+        "-anlp",
+        "|",
+        "grep",
+        "-iv",
+        "'unix'",
+        "|",
+        "awk",
+        "'{print $4,7}'"
+
+  ],
+  "Env": [
+    "FOO=bar",
+    "BAZ=quux"
+  ]
+}`)
+
+   
+ commandOutput, err:=RunContainerCommands(containerId,command)
+  return commandOutput, err
+}
+
+
+
+
+func ListContainerDns(containerId string) (string,error){
+	command := []byte(`{
+  "AttachStdin": false,
+  "AttachStdout": true,
+  "AttachStderr": true,
+  "DetachKeys": "ctrl-p,ctrl-q",
+  "Tty": false,
+  "Cmd": [
+    "cat",
+	"/etc/resolv.conf"
+  ],
+  "Env": [
+    "FOO=bar",
+    "BAZ=quux"
+  ]
+}`)
+  commandOutput, err:=RunContainerCommands(containerId,command)
+  return commandOutput, err
+}
+
+
+//This function is for running certain commands an a container
+
+func RunContainerCommands(containerId string,command []byte) (string, error) {
+        viper := config.NewViper()
+        urlForCreatingExec := fmt.Sprintf("%s:%s/containers/%s/exec", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
+        createExecRequestData := command
+
+        startExecRequestData := []byte(`{
+  "Detach": false,
+  "Tty": false
+}`)
+        response, err := http.Post(urlForCreatingExec, "application/json", bytes.NewBuffer(createExecRequestData))
+
+        if err != nil {
+                return "", err
+        }
+        defer response.Body.Close()
+
+        body, _ := ioutil.ReadAll(response.Body)
+        var requestData models.CreateExec
+        json.Unmarshal([]byte(body), &requestData)
+
+        urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port, requestData.Id)
+        response, err = http.Post(urlForStartingExec, "application/json", bytes.NewBuffer(startExecRequestData))
+
+        if err != nil {
+                return "", err
+        }
+        defer response.Body.Close()
+        body, _ = ioutil.ReadAll(response.Body)
+
+        return string(body), nil
+}
