@@ -1,11 +1,11 @@
 package models
 
 type ListContainer struct {
-	ID     string   `json:"id"`
-	Names  []string `json:"names"`
-	Image  string   `json:"image"`
-	Status string   `json:"status"`
-	Ports  []Port   `json:"ports"`
+	ID              string      `json:"id"`
+	Names           []string    `json:"names"`
+	Image           string      `json:"image"`
+	Status          string      `json:"status"`
+	Ports           []Port      `json:"ports"`
 	NetworkSettings interface{} `json:"networksettings"`
 }
 
@@ -23,12 +23,17 @@ type Container struct {
 	Name    string `json:"name"`
 }
 
-
 type FileInfo struct {
 	Path string `json:"path"`
-	Kind int `json:"Kind"`
+	Kind int    `json:"Kind"`
 }
 
 type ContainerProcesses struct {
 	Processes [][]string
+}
+
+type ContainerPorts struct {
+	Port        string `json:"port"`
+	Description string `json:"description"`
+	Impact      string `json:"impact"`
 }

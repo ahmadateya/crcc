@@ -52,7 +52,6 @@ func FileAnalysisByNameVersionTwo(files string) ([]models.FileInfo, error) {
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
-	fmt.Printf("=================================== %+v\n", file)
 	if err != nil {
 		return nil, err
 	}
