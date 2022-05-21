@@ -39,6 +39,7 @@ func OpenPorts(ports string) ([]models.ContainerPorts,error){
 			if   malPort["Port"] == currentPort[len(currentPort)-1] {
 				malPorts = append(malPorts, models.ContainerPorts{Port: port,Description: malPort["Description"],
 				Impact: malPort["Impact"]})
+				break
 			}
 		}
 	}

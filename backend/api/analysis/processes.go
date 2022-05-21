@@ -18,7 +18,7 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([]models.Co
     var malProcesses []models.ContainerProcess
 
 	getCurrentPath, _:=os.Getwd()
-	file, err:= os.Open(getCurrentPath+"/api/analysis/checks/malfilenames.json")
+	file, err:= os.Open(getCurrentPath+"/api/analysis/checks/malProcesses.json")
 
 	if err != nil{
 		return nil,err
@@ -39,7 +39,7 @@ func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([]models.Co
 		for _,malProcess := range currentMalProcesses{
 			re,_ := regexp.Compile(malProcess.Cmd)
 			match := re.FindStringIndex(process[len(process)-1])
-			if  malProcess.Applied && len(match) !=0{
+			if  len(match)!=0{
 				checkProcessTypeScan(&malProcess,&malProcesses,&process)
 			}
 		}
@@ -56,7 +56,6 @@ func checkProcessTypeScan(malProcess *models.ContainerProcess,malProcesses *[]mo
 						Cmd: (*process)[7],
 						User: (*process)[0],
 						Type: malProcess.Type,
-						Applied: malProcess.Applied,
 						Description: malProcess.Description,
 						Impact: malProcess.Impact,
 					})
@@ -66,7 +65,6 @@ func checkProcessTypeScan(malProcess *models.ContainerProcess,malProcesses *[]mo
 						Cmd: (*process)[7],
 						User: (*process)[0],
 						Type: malProcess.Type,
-						Applied: malProcess.Applied,
 						Description: malProcess.Description,
 						Impact: malProcess.Impact,
 					})

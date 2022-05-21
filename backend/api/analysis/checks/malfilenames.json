@@ -1,3 +1,7 @@
-{
-    "evil.go":true
-}
+[
+    {
+        "File":"evil.go",
+        "Description":"",
+        "Impact":"High"
+    }
+]
