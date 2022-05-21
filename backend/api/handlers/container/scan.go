@@ -1,6 +1,7 @@
 package container
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ahmadateya/crcc/api/analysis"
 	"github.com/ahmadateya/crcc/api/models"
@@ -63,13 +64,17 @@ func applyNetworkAnalysis(containerId string) (models.ScanResult, error) {
 	}
 	fmt.Printf("===========malPorts======== %+v\n", malPorts)
 
+	// HINT hard coding the malicious ports until scan function is ready
+	malPorts = []models.ContainerPorts{
+		{"7222", "Lupper worm potentially running on this port", "High"},
+		{"4156", "Linux.Slapper.Worm family of worms potentialy running on this port", "High"},
+	}
 	// formatting scan result
 	if len(malPorts) != 0 {
 		// just a POC change this later
 		var detailsString string
-		for _, malPort := range malPorts {
-			detailsString += "\n" + fmt.Sprintf("%+v", malPort)
-		}
+		marshalPorts, _ := json.Marshal(malPorts)
+		detailsString = string(marshalPorts)
 		scanResult.Passed = false
 		scanResult.Details = detailsString
 	} else {

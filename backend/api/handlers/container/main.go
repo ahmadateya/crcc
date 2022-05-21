@@ -113,5 +113,22 @@ func Scan(c *gin.Context) {
 	scanResponse.Results = append(scanResponse.Results, fileSystemScan)
 	// append network analysis to the scan response
 	scanResponse.Results = append(scanResponse.Results, networkScan)
+
+	// calc the compliance
+	scanResponse.Compliance = calcCompliance(scanResponse.Results)
 	c.JSON(200, scanResponse)
+}
+
+// very basic equation to calculate the compliance
+func calcCompliance(results []models.ScanResult) int {
+	var passed, failed int
+	for _, result := range results {
+		if result.Passed {
+			passed = passed + 1
+		} else {
+			failed = failed + 1
+		}
+	}
+	passed = passed / len(results) * 100
+	return passed
 }

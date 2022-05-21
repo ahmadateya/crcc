@@ -1,7 +1,8 @@
 package models
 
 type ScanDataResponse struct {
-	Results []ScanResult `json:"results"`
+	Results    []ScanResult `json:"results"`
+	Compliance int          `json:"compliance"`
 }
 
 type ScanResult struct {

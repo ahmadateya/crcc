@@ -50,7 +50,8 @@
           <h2 v-if="loaded.error">Error while fetching data please request it again.</h2>
           <h2 v-else-if="loaded.responseError">Please make sure of allowing the Rest API.</h2>
           <loading-bar></loading-bar>
-          <div v-if="isScanned" class="col-xl-3 col-md-3">
+          <!-- Analysis Part -->
+          <div v-if="isScanned" class="col-xl-4 col-md-4">
             <h1>
               <i class="ni ni-chart-bar-32"></i> <span> Scan Results</span>
             </h1>
@@ -60,7 +61,7 @@
             >
               <b-button v-b-toggle="'collapse-' + index + '-details'"
                         :id="'collapse-' + index"
-                        class="align-left"
+                        class="align-left w-75 p-3 mb-1 "
                         v-bind:class="[result.passed ? 'text-success' : 'passed text-danger' ]"
               >
                 <i v-if="result.passed" class="ni ni-check-bold"></i>
@@ -69,13 +70,44 @@
               </b-button>
               <div v-if="result.details !== ''">
                 <b-collapse :id="'collapse-' + index + '-details'" class="mt-2">
-                  <b-card-text>
-<!--       TODO needs a reformat; for example display the details in separate lines/points ..etc             -->
+                      <!--    details is an array of objects  -->
+                  <b-card-text v-if="result.details.charAt(0) === '['">
+                    <ol>
+                      <li v-for="detail in JSON.parse(result.details)">
+                        <br>
+                        <ul>
+                          <li v-for="(value, key) in detail">
+                            <b >{{key}} : </b> <span>{{value}}</span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ol>
+                  </b-card-text>
+                    <!--      details is a string of data -->
+                  <b-card-text v-else>
                     {{ result.details }}
                   </b-card-text>
                 </b-collapse>
               </div>
             </div>
+          </div>
+          <!--  Chart Part  -->
+          <div v-if="isScanned" class="col-xl-8 col-md-8">
+            <h1>
+              <i class="ni ni-chart-bar-32"></i> <span> Compliance Chart</span>
+            </h1>
+            <doughnut-chart
+                       :height="250"
+                       ref="doughnutChart"
+                       :chart-data="donutChart.chartData"
+            >
+            </doughnut-chart>
+            <pie-chart
+                       :height="250"
+                       ref="pieChart"
+                       :chart-data="pieChart.chartData"
+            >
+            </pie-chart>
           </div>
         </div>
       </div>
@@ -112,8 +144,32 @@ export default {
             passed: true,
             details: '',
           }
-        ]
-      }
+        ],
+        compliance: '100%',
+        failure: '0%',
+      },
+      donutChart: {
+        chartData: {
+          labels: [],
+          datasets: [
+            {
+              backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+              data: [25, 20, 30, 22, 17, 100],
+            },
+          ],
+        }
+      },
+      pieChart: {
+        chartData: {
+          labels: ['Failed', 'Passed'],
+          datasets: [
+            {
+              backgroundColor: ['#DD1B16', '#41B883'],
+              data: [75, 25],
+            },
+          ],
+        }
+      },
     }
   },
   async fetch() {
@@ -143,6 +199,8 @@ export default {
           }
           this.isScanned = true;
           this.scanData = response.data;
+          this.pieChart.chartData.datasets[0].data = [10, 90];
+          // this.pieChart.chartData.datasets[0].data = [100 - this.scanData.compliance, this.scanData.compliance];
           this.$nuxt.$loading.finish()
         }).catch(err=> {
             this.isScanned = false;
