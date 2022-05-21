@@ -10,6 +10,7 @@ import (
 func applyFileSystemAnalysis(containerId string) (models.ScanResult, error) {
 	// initialize scan result object
 	var scanResult models.ScanResult
+	scanResult.Title = "File System Analysis"
 
 	// get container files
 	containerFiles, err := containerPkg.ListContainerFilesChangesSecondVersion(containerId)
@@ -32,12 +33,9 @@ func applyFileSystemAnalysis(containerId string) (models.ScanResult, error) {
 		for _, malFile := range malFiles {
 			detailsString += "\n" + malFile.Path
 		}
-
-		scanResult.Title = "File System Analysis"
 		scanResult.Passed = false
 		scanResult.Details = detailsString
 	} else {
-		scanResult.Title = "File System Analysis"
 		scanResult.Passed = true
 		scanResult.Details = ""
 	}
@@ -47,33 +45,34 @@ func applyFileSystemAnalysis(containerId string) (models.ScanResult, error) {
 func applyNetworkAnalysis(containerId string) (models.ScanResult, error) {
 	// initialize scan result object
 	var scanResult models.ScanResult
+	scanResult.Title = "Network Analysis"
+
 	// get container opened ports
 	containerPorts, err := containerPkg.ListContainerOpenPorts(containerId)
+	fmt.Printf("############## Container ports: %v\n", containerPorts)
 	if err != nil {
 		fmt.Printf("Error getting container opened ports: %s\n", err)
 		return scanResult, err
 	}
 
-	fmt.Printf("================== %+v\n", containerPorts)
 	// search for malicious ports
 	malPorts, err := analysis.CheckOpenPorts(containerPorts)
 	if err != nil {
 		fmt.Printf("Error analyzing container opened ports: %s\n", err)
 		return scanResult, err
 	}
+	fmt.Printf("===========malPorts======== %+v\n", malPorts)
 
 	// formatting scan result
 	if len(malPorts) != 0 {
 		// just a POC change this later
 		var detailsString string
 		for _, malPort := range malPorts {
-			detailsString += "\n" + fmt.Sprintf("%#v", malPort)
+			detailsString += "\n" + fmt.Sprintf("%+v", malPort)
 		}
-		scanResult.Title = "Network Analysis"
 		scanResult.Passed = false
 		scanResult.Details = detailsString
 	} else {
-		scanResult.Title = "Network Analysis"
 		scanResult.Passed = true
 		scanResult.Details = ""
 	}

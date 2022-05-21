@@ -4,4 +4,4 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
-RUN apk add --update --no-cache bash vim
+RUN apk add --update --no-cache bash vim net-tools
