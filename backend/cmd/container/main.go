@@ -139,14 +139,14 @@ func ListContainerOpenPorts(containerId string) (string, error) {
   "Tty": false,
   "Cmd": [
     "netstat",
-        "-anlp",
-        "|",
-        "grep",
-        "-iv",
-        "'unix'",
-        "|",
-        "awk",
-        "'{print $4,7}'"
+        " -anlp",
+        " |",
+        " grep",
+        " -iv",
+        " 'unix'",
+        " |",
+        " awk",
+        " '{print $4,7}'"
 
   ],
   "Env": [
