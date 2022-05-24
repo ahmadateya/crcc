@@ -12,7 +12,7 @@ import (
 //The process.type here is for checking if the user wants to check the process.cmd it self or he just wants to see
 // if the current command is running under a certain user
 
-func ProcessesAnalysisByRegex(processes *models.ContainerProcesses) ([]models.ContainerProcess, error) {
+func ProcessesAnalysisByRegex(processes models.ContainerProcesses) ([]models.ContainerProcess, error) {
 
 	var malProcesses []models.ContainerProcess
 
