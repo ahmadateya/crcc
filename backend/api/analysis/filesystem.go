@@ -10,9 +10,9 @@ import (
 	"github.com/ahmadateya/crcc/api/models"
 )
 
-func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo, error) {
+func FileAnalysisByName(files *[]models.FileInfo) ([]models.ContainerFile, error) {
 
-	var malFiles []models.FileInfo
+	var malFiles []models.ContainerFile
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
@@ -24,7 +24,7 @@ func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo, error) {
 
 	jsonData, _ := ioutil.ReadAll(file)
 
-	var currentMalFiles map[string]bool
+	var currentMalFiles []models.ContainerFile
 
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
@@ -34,8 +34,12 @@ func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo, error) {
 
 	for _, file := range *files {
 		path := strings.Split(file.Path, "/")
-		if currentMalFiles[path[len(path)-1]] {
-			malFiles = append(malFiles, models.FileInfo{Path: file.Path, Kind: file.Kind})
+		for _, malFile := range currentMalFiles{
+			if malFile.File == path[len(path)-1] {
+				malFiles = append(malFiles, models.ContainerFile{File: path[len(path)-1],
+				Description: malFile.Description, Impact: malFile.Impact})
+				break
+			}
 		}
 	}
 
@@ -43,9 +47,9 @@ func FileAnalysisByName(files *[]models.FileInfo) ([]models.FileInfo, error) {
 
 }
 
-func FileAnalysisByNameVersionTwo(files string) ([]models.FileInfo, error) {
+func FileAnalysisByNameVersionTwo(files string) ([]models.ContainerFile, error) {
 	var fullPath []string
-	var malFiles []models.FileInfo
+	var malFiles []models.ContainerFile
 
 	fullPath = strings.Split(files, "\n")
 
@@ -59,7 +63,7 @@ func FileAnalysisByNameVersionTwo(files string) ([]models.FileInfo, error) {
 
 	jsonData, _ := ioutil.ReadAll(file)
 
-	var currentMalFiles map[string]bool
+	var currentMalFiles []models.ContainerFile
 
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
@@ -68,10 +72,12 @@ func FileAnalysisByNameVersionTwo(files string) ([]models.FileInfo, error) {
 	}
 
 	for _, file := range fullPath {
-		for malFile, mal := range currentMalFiles {
-			path := strings.Split(file, "/")
-			if mal && malFile == path[len(path)-1] {
-				malFiles = append(malFiles, models.FileInfo{Path: file, Kind: 0})
+		path := strings.Split(file, "/")
+		for _, malFile := range currentMalFiles{
+			if malFile.File == path[len(path)-1] {
+				malFiles = append(malFiles, models.ContainerFile{File: path[len(path)-1],
+				Description: malFile.Description, Impact: malFile.Impact})
+				break
 			}
 		}
 	}
