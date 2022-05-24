@@ -32,7 +32,7 @@ func applyFileSystemAnalysis(containerId string) (models.ScanResult, error) {
 		// just a POC change this later
 		var detailsString string
 		for _, malFile := range malFiles {
-			detailsString += "\n" + malFile.Path
+			detailsString += "\n" + malFile.File
 		}
 		scanResult.Passed = false
 		scanResult.Details = detailsString
