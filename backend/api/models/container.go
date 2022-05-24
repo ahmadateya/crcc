@@ -23,17 +23,34 @@ type Container struct {
 	Name    string `json:"name"`
 }
 
-type FileInfo struct {
+
+type FileInfo struct{
 	Path string `json:"path"`
-	Kind int    `json:"Kind"`
+	Kind string `json:"kind"`
 }
 
-type ContainerProcesses struct {
+type ContainerFile struct {
+	File string `json:"file"`
+	Description string `json:"description"`
+	Impact string `json:"impact"`
+}
+
+
+type ContainerProcesses struct{
 	Processes [][]string
 }
 
-type ContainerPorts struct {
-	Port        string `json:"port"`
+
+type ContainerProcess struct {
+	Cmd string `json:"cmd"`
+	User string `json:"user"`
+	Type int `json:"type"`
 	Description string `json:"description"`
-	Impact      string `json:"impact"`
+	Impact string `json:"impact"`
+}
+
+type ContainerPorts struct {
+	Port string `json:"port"`
+	Description string `json:"description"`
+	Impact string `json:"impact"`
 }
