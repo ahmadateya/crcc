@@ -118,5 +118,5 @@ func applyProcessAnalysis(containerId string) (models.ScanResult, error) {
 	return scanResult, nil
 }
 
-func applyDNSAnalysis(containerId string) (models.ScanResult, error) {
-}
+//func applyDNSAnalysis(containerId string) (models.ScanResult, error) {
+//}
