@@ -3,10 +3,10 @@ package container
 import (
 	"encoding/json"
 	"github.com/ahmadateya/crcc/api/analysis"
-
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
 	"github.com/gin-gonic/gin"
+	"math"
 )
 
 func List(c *gin.Context) {
@@ -125,8 +125,9 @@ func Scan(c *gin.Context) {
 }
 
 // very basic equation to calculate the compliance
-func calcCompliance(results []models.ScanResult) int {
+func calcCompliance(results []models.ScanResult) float32 {
 	var passed, failed int
+	var compliance float32
 	for _, result := range results {
 		if result.Passed {
 			passed = passed + 1
@@ -134,6 +135,6 @@ func calcCompliance(results []models.ScanResult) int {
 			failed = failed + 1
 		}
 	}
-	passed = passed / len(results) * 100
-	return passed
+	compliance = (float32(passed) * float32(100)) / float32(len(results))
+	return float32(math.Round(float64(compliance*100)) / 100)
 }

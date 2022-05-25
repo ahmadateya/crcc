@@ -2,7 +2,7 @@ package models
 
 type ScanDataResponse struct {
 	Results    []ScanResult `json:"results"`
-	Compliance int          `json:"compliance"`
+	Compliance float32      `json:"compliance"`
 }
 
 type ScanResult struct {

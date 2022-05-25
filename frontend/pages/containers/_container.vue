@@ -51,7 +51,7 @@
           <h2 v-else-if="loaded.responseError">Please make sure of allowing the Rest API.</h2>
           <loading-bar></loading-bar>
           <!-- Analysis Part -->
-          <div v-if="isScanned" class="col-xl-4 col-md-4">
+          <div v-if="isScanned" class="col-xl-6 col-md-6">
             <h1>
               <i class="ni ni-chart-bar-32"></i> <span> Scan Results</span>
             </h1>
@@ -92,20 +92,19 @@
             </div>
           </div>
           <!--  Chart Part  -->
-          <div v-if="isScanned" class="col-xl-8 col-md-8">
+          <div v-if="isScanned" class="col-xl-6 col-md-6">
             <h1>
-              <i class="ni ni-chart-bar-32"></i> <span> Compliance Chart</span>
+              <i class="ni ni-chart-pie-35"></i>
+              <span> Compliance Percentage</span>
+              <span
+                  v-bind:class="[scanData.compliance >= 50 ? 'text-success' : 'passed text-danger' ]"
+              >{{scanData.compliance}} %</span>
             </h1>
-            <doughnut-chart
-                       :height="250"
-                       ref="doughnutChart"
-                       :chart-data="donutChart.chartData"
-            >
-            </doughnut-chart>
             <pie-chart
+                        v-if="isScanned"
                        :height="250"
                        ref="pieChart"
-                       :chart-data="pieChart.chartData"
+                       :chart-data="chartData"
             >
             </pie-chart>
           </div>
@@ -145,31 +144,10 @@ export default {
             details: '',
           }
         ],
-        compliance: '100%',
-        failure: '0%',
+        compliance: '',
       },
-      donutChart: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-              data: [25, 20, 30, 22, 17, 100],
-            },
-          ],
-        }
-      },
-      pieChart: {
-        chartData: {
-          labels: ['Failed', 'Passed'],
-          datasets: [
-            {
-              backgroundColor: ['#DD1B16', '#41B883'],
-              data: [75, 25],
-            },
-          ],
-        }
-      },
+      chartData: {},
+      options: {},
     }
   },
   async fetch() {
@@ -187,9 +165,7 @@ export default {
   methods: {
     async scanContainer() {
       this.isScanned = true;
-      // this.$nextTick(() => {
         this.$nuxt.$loading.start()
-      // })
 
       await this.$axios.get(`${url}/containers/${this.$route.params.container}/scan`)
         .then(response => {
@@ -197,14 +173,24 @@ export default {
             this.loaded.responseError=true;
             return;
           }
-          this.isScanned = true;
           this.scanData = response.data;
-          this.pieChart.chartData.datasets[0].data = [10, 90];
-          // this.pieChart.chartData.datasets[0].data = [100 - this.scanData.compliance, this.scanData.compliance];
+          this.chartData = {
+            labels: ['Failed', 'Passed'],
+            datasets: [
+              {
+                backgroundColor: ['#DD1B16', '#41B883'],
+                data: [100 - this.scanData.compliance, this.scanData.compliance],
+              },
+            ],
+          };
+          this.isScanned = true;
           this.$nuxt.$loading.finish()
-        }).catch(err=> {
+        }).catch((err)=> {
+            this.$nuxt.$loading.finish()
             this.isScanned = false;
-            this.loaded.error="Error while requesting data please try again."});
+            this.loaded.error="Error while requesting data please try again.";
+            console.log(err, "error");
+          });
     }
   }
 };
