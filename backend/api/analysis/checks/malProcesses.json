@@ -4,7 +4,7 @@
         "User":"root",
         "Type": 0,
         "Applied": true,
-        "Descrption":"A reverse shell is opened",
+        "Description":"A reverse shell is opened",
         "Impact":"High"
     },
     {
@@ -12,7 +12,7 @@
       "User": "root",
       "Type": 0,
       "Applied": true,
-      "Descrption": "A user opened a new shell",
+      "Description": "A user opened a new shell",
       "Impact": "High"
     },
     {
@@ -20,14 +20,14 @@
       "User": "root",
       "Type": 0,
       "Applied": true,
-      "Descrption": "The shadow file is being edited",
+      "Description": "The shadow file is being edited",
       "Impact": "High"
     },
     {
       "Cmd": "spawn('/bin/sh')",
       "User": "root",
       "Type": 0,
-      "Descrption": "A potential python reverse shell is opened",
+      "Description": "A potential python reverse shell is opened",
       "Impact": "High"
     }
     ,
@@ -36,7 +36,7 @@
       "User": "root",
       "Type": 0,
       "Applied": true,
-      "Descrption": "A potential ruby reverse shell is opened",
+      "Description": "A potential ruby reverse shell is opened",
       "Impact": "High"
     },
     {
@@ -44,7 +44,7 @@
       "User": "root",
       "Type": 0,
       "Applied": true,
-      "Descrption": "A potential malicious file is downloaded",
+      "Description": "A potential malicious file is downloaded",
       "Impact": "Medium"
     },
     {
@@ -52,9 +52,7 @@
       "User": "root",
       "Type": 0,
       "Applied": true,
-      "Descrption": "A malicious domain known for the SysJoker malware",
+      "Description": "A malicious domain known for the SysJoker malware",
       "Impact": "Medium"
     }
-
-
 ]

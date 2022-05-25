@@ -2,12 +2,11 @@ package container
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ahmadateya/crcc/api/analysis"
-
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
 	"github.com/gin-gonic/gin"
+	"math"
 )
 
 func List(c *gin.Context) {
@@ -36,15 +35,12 @@ func Show(c *gin.Context) {
 
 func ListProcesses(c *gin.Context) {
 	containerId := c.Param("container")
-	container := containerPkg.ListContainerProcesses(containerId, "")
-	fmt.Println(container)
-	var data models.ContainerProcesses
-	err := json.Unmarshal([]byte(container), &data)
+	processes, err := containerPkg.ListContainerProcesses(containerId, "")
 	if err != nil {
-		c.JSON(404, err.Error())
+		c.JSON(500, err.Error())
 		return
 	}
-	c.JSON(200, data)
+	c.JSON(200, processes)
 }
 
 func ListFileChanges(c *gin.Context) {
@@ -102,6 +98,8 @@ func Scan(c *gin.Context) {
 		c.JSON(500, err.Error())
 		return
 	}
+	// append file system analysis to the scan response
+	scanResponse.Results = append(scanResponse.Results, fileSystemScan)
 
 	// apply network analysis to the container
 	networkScan, err := applyNetworkAnalysis(containerId)
@@ -109,10 +107,17 @@ func Scan(c *gin.Context) {
 		c.JSON(500, err.Error())
 		return
 	}
-	// append file system analysis to the scan response
-	scanResponse.Results = append(scanResponse.Results, fileSystemScan)
 	// append network analysis to the scan response
 	scanResponse.Results = append(scanResponse.Results, networkScan)
+
+	// apply process analysis to the container
+	processScan, err := applyProcessAnalysis(containerId)
+	if err != nil {
+		c.JSON(500, err.Error())
+		return
+	}
+	// append process analysis to the scan response
+	scanResponse.Results = append(scanResponse.Results, processScan)
 
 	// calc the compliance
 	scanResponse.Compliance = calcCompliance(scanResponse.Results)
@@ -120,8 +125,9 @@ func Scan(c *gin.Context) {
 }
 
 // very basic equation to calculate the compliance
-func calcCompliance(results []models.ScanResult) int {
+func calcCompliance(results []models.ScanResult) float32 {
 	var passed, failed int
+	var compliance float32
 	for _, result := range results {
 		if result.Passed {
 			passed = passed + 1
@@ -129,6 +135,6 @@ func calcCompliance(results []models.ScanResult) int {
 			failed = failed + 1
 		}
 	}
-	passed = passed / len(results) * 100
-	return passed
+	compliance = (float32(passed) * float32(100)) / float32(len(results))
+	return float32(math.Round(float64(compliance*100)) / 100)
 }

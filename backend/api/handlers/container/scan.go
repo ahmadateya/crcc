@@ -31,9 +31,8 @@ func applyFileSystemAnalysis(containerId string) (models.ScanResult, error) {
 	if len(malFiles) != 0 {
 		// just a POC change this later
 		var detailsString string
-		for _, malFile := range malFiles {
-			detailsString += "\n" + malFile.Path
-		}
+		marshalPorts, _ := json.Marshal(malFiles)
+		detailsString = string(marshalPorts)
 		scanResult.Passed = false
 		scanResult.Details = detailsString
 	} else {
@@ -83,3 +82,41 @@ func applyNetworkAnalysis(containerId string) (models.ScanResult, error) {
 	}
 	return scanResult, nil
 }
+
+func applyProcessAnalysis(containerId string) (models.ScanResult, error) {
+	// initialize scan result object
+	var scanResult models.ScanResult
+	scanResult.Title = "Process Analysis"
+
+	// get container processes
+	containerProcesses, err := containerPkg.ListContainerProcesses(containerId, "")
+	if err != nil {
+		fmt.Printf("Error getting container processes: %s\n", err)
+		return scanResult, err
+	}
+
+	fmt.Printf("############## Container processes: %v\n", containerProcesses)
+	// search for malicious processes
+	malProcesses, err := analysis.ProcessesAnalysisByRegex(containerProcesses)
+	if err != nil {
+		fmt.Printf("Error analyzing container processes: %s\n", err)
+		return scanResult, err
+	}
+
+	// formatting scan result
+	if len(malProcesses) != 0 {
+		// just a POC change this later
+		var detailsString string
+		marshalPorts, _ := json.Marshal(malProcesses)
+		detailsString = string(marshalPorts)
+		scanResult.Passed = false
+		scanResult.Details = detailsString
+	} else {
+		scanResult.Passed = true
+		scanResult.Details = ""
+	}
+	return scanResult, nil
+}
+
+//func applyDNSAnalysis(containerId string) (models.ScanResult, error) {
+//}

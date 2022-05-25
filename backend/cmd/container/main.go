@@ -44,17 +44,19 @@ func GetContainerInfo(containerId string) string {
 	}
 }
 
-// Get container running processes
-func ListContainerProcesses(containerId string, ps_args string) string {
+// ListContainerProcesses Get container running processes
+func ListContainerProcesses(containerId string, ps_args string) (models.ContainerProcesses, error) {
 	viper := config.NewViper()
 	url := fmt.Sprintf("%s:%s/containers/"+containerId+"/top?ps_args="+ps_args, viper.App.Docker.Host, viper.App.Docker.Port)
 	fmt.Println(url)
 	response, err := http.Get(url)
 	if err != nil {
-		return fmt.Sprintf("The HTTP request failed with error %s\n", err)
+		return models.ContainerProcesses{}, err
 	} else {
+		p := models.ContainerProcesses{}
 		data, _ := ioutil.ReadAll(response.Body)
-		return string(data)
+		json.Unmarshal(data, &p)
+		return p, nil
 	}
 }
 
@@ -128,10 +130,9 @@ func ListContainerFilesChangesSecondVersion(containerId string) (string, error) 
 	return string(body), nil
 }
 
-
 func ListContainerOpenPorts(containerId string) (string, error) {
 
-        command := []byte(`{
+	command := []byte(`{
   "AttachStdin": false,
   "AttachStdout": true,
   "AttachStderr": true,
@@ -175,41 +176,40 @@ func ListContainerDns(containerId string) (string, error) {
     "BAZ=quux"
   ]
 }`)
-  commandOutput, err:=RunContainerCommands(containerId,command)
-  return commandOutput, err
+	commandOutput, err := RunContainerCommands(containerId, command)
+	return commandOutput, err
 }
-
 
 //This function is for running certain commands an a container
 
-func RunContainerCommands(containerId string,command []byte) (string, error) {
-        viper := config.NewViper()
-        urlForCreatingExec := fmt.Sprintf("%s:%s/containers/%s/exec", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
-        createExecRequestData := command
+func RunContainerCommands(containerId string, command []byte) (string, error) {
+	viper := config.NewViper()
+	urlForCreatingExec := fmt.Sprintf("%s:%s/containers/%s/exec", viper.App.Docker.Host, viper.App.Docker.Port, containerId)
+	createExecRequestData := command
 
-        startExecRequestData := []byte(`{
+	startExecRequestData := []byte(`{
   "Detach": false,
   "Tty": false
 }`)
-        response, err := http.Post(urlForCreatingExec, "application/json", bytes.NewBuffer(createExecRequestData))
+	response, err := http.Post(urlForCreatingExec, "application/json", bytes.NewBuffer(createExecRequestData))
 
-        if err != nil {
-                return "", err
-        }
-        defer response.Body.Close()
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
 
-        body, _ := ioutil.ReadAll(response.Body)
-        var requestData models.CreateExec
-        json.Unmarshal([]byte(body), &requestData)
+	body, _ := ioutil.ReadAll(response.Body)
+	var requestData models.CreateExec
+	json.Unmarshal([]byte(body), &requestData)
 
-        urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port, requestData.Id)
-        response, err = http.Post(urlForStartingExec, "application/json", bytes.NewBuffer(startExecRequestData))
+	urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port, requestData.Id)
+	response, err = http.Post(urlForStartingExec, "application/json", bytes.NewBuffer(startExecRequestData))
 
-        if err != nil {
-                return "", err
-        }
-        defer response.Body.Close()
-        body, _ = ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
+	body, _ = ioutil.ReadAll(response.Body)
 
-        return string(body), nil
+	return string(body), nil
 }
