@@ -172,3 +172,10 @@ func storeAnalysis(containerId string, results models.ScanDataResponse) error {
 	db.Create(&containerRecord) // pass pointer of data to Create
 	return nil
 }
+
+// History returns the history of the container scans
+func History(c *gin.Context) {
+	containerId := c.Param("container")
+	containerScans := containerPkg.ListContainerHistory(containerId)
+	c.JSON(200, containerScans)
+}

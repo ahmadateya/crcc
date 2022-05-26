@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/ahmadateya/crcc/api/models"
 	"github.com/ahmadateya/crcc/config"
@@ -212,4 +214,27 @@ func RunContainerCommands(containerId string, command []byte) (string, error) {
 	body, _ = ioutil.ReadAll(response.Body)
 
 	return string(body), nil
+}
+
+func ListContainerHistory(containerId string) []config.Container {
+	// connect to the database
+	viper := config.NewViper()
+	db, err := gorm.Open("postgres", viper.Database.Connection)
+	if err != nil {
+		fmt.Printf(err.Error())
+		panic(err.Error())
+	}
+	defer db.Close()
+	var containerScans []config.Container // DB model
+	db.Where("name = ?", containerId).Find(&containerScans)
+
+	for _, containerScan := range containerScans {
+		// format the date
+		containerScan.CreatedAt, err = time.Parse("2006-01-02", containerScan.CreatedAt.String())
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	return containerScans
 }

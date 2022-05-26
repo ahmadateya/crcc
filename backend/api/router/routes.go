@@ -22,6 +22,7 @@ func getContainerRoutes(r *gin.Engine) {
 	r.GET("/containers", container.List)
 	r.GET("/containers/:container", container.Show)
 	r.GET("/containers/:container/scan", container.Scan)
+	r.GET("/containers/:container/history", container.History)
 }
 
 func getDummyRoutes(r *gin.Engine) {
