@@ -12,7 +12,7 @@ import (
 
 func getRoutes(r *gin.Engine) {
 	// dummy routes for test
-	getDummyRoutes(r)
+	//getDummyRoutes(r)
 
 	// attaching container routes
 	getContainerRoutes(r)

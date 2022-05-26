@@ -9,27 +9,25 @@ services:
     command: sh scripts/entrypoint.sh
     ports:
       - 8080:8080 # exposed without the proxy
-#    depends_on:
-#      - db
+    depends_on:
+     - db
     networks:
       - crcc-docker-network
 
-#
-#  db:
-#    env_file: .env
-#    container_name: ${DB_CONTAINER_NAME}
-#    image: postgres:11.1-alpine
-#    restart: always
-#    ports:
-#      - ${DB_PORT}:5432
-#    environment:
-#      POSTGRES_USER: 'db_user'
-#      POSTGRES_PASSWORD: 'userpassword'
-#      POSTGRESS_DB: 'rootuserpassword'
-#    volumes:
-#      - ./.docker-data/dbdata:/var/lib/postgresql
-#    networks:
-#      - crcc-docker-network
+  db:
+    env_file: .env
+    container_name: ${DB_CONTAINER_NAME}
+    image: postgres:13-alpine
+    ports:
+      - '${DB_PORT}:5432'
+    environment:
+      POSTGRES_USER: 'crcc_user'
+      POSTGRES_PASSWORD: '123'
+      POSTGRES_DB: 'crcc_db'
+    volumes:
+      - "./.docker-data/dbdata:/var/lib/postgresql/data"
+    networks:
+     - crcc-docker-network
 
   frontend:
     build: frontend
