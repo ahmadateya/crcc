@@ -36,6 +36,9 @@
       </div>
       <br>
       <!--  History Part    -->
+      <div v-if="!history.length" class="col-xl-12">
+          <h2>No History Found</h2>
+      </div>
       <div v-for="(scan, scanIndex) in history" class="col-xl-12">
         <div class="border card-header ">
           <div class="row">

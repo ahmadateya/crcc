@@ -131,6 +131,8 @@ func Scan(c *gin.Context) {
 		c.JSON(500, err.Error())
 		return
 	}
+
+	// return the response
 	c.JSON(200, scanResponse)
 }
 

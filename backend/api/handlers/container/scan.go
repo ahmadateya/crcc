@@ -64,10 +64,10 @@ func applyNetworkAnalysis(containerId string) (models.ScanResult, error) {
 	fmt.Printf("===========malPorts======== %+v\n", malPorts)
 
 	// HINT hard coding the malicious ports until scan function is ready
-	malPorts = []models.ContainerPorts{
-		{"7222", "Lupper worm potentially running on this port", "High"},
-		{"4156", "Linux.Slapper.Worm family of worms potentialy running on this port", "High"},
-	}
+	//malPorts = []models.ContainerPorts{
+	//	{"7222", "Lupper worm potentially running on this port", "High"},
+	//	{"4156", "Linux.Slapper.Worm family of worms potentialy running on this port", "High"},
+	//}
 	// formatting scan result
 	if len(malPorts) != 0 {
 		// just a POC change this later
