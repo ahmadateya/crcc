@@ -4,13 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/ahmadateya/crcc/api/models"
+	"github.com/ahmadateya/crcc/config"
 	"github.com/jinzhu/gorm"
 	"io/ioutil"
 	"net/http"
-	"time"
-
-	"github.com/ahmadateya/crcc/api/models"
-	"github.com/ahmadateya/crcc/config"
 )
 
 // Container package to handle container related business
@@ -227,17 +225,5 @@ func ListContainerHistory(containerId string) []config.Container {
 	defer db.Close()
 	var containerScans []config.Container // DB model
 	db.Where("name = ?", containerId).Find(&containerScans)
-
-	for _, containerScan := range containerScans {
-		// format the date
-		parsedTime, err := time.Parse("022-05-27 15:13:05.127725054 +0200 EET ", containerScan.CreatedAt)
-		fmt.Println("================ parsedTime", parsedTime)
-		if err != nil {
-			fmt.Println(err)
-		}
-		//containerScan.CreatedAt = parsedTime.Format("2006-01-02 12:51:54 ")
-		//fmt.Println("=========== Formatted Time", containerScan.CreatedAt)
-	}
-
 	return containerScans
 }
