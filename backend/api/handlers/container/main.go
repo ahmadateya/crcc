@@ -172,7 +172,7 @@ func storeAnalysis(containerId string, results models.ScanDataResponse) error {
 	containerRecord := config.Container{
 		Name:      containerId,
 		Scan:      string(scanJsonData),
-		CreatedAt: time.Now().In(loc).String(),
+		CreatedAt: time.Now().In(loc).Format("2006-01-02 3:4:5 pm"),
 	}
 	db.Create(&containerRecord) // pass pointer of data to Create
 	return nil
