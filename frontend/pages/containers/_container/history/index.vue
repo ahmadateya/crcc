@@ -181,5 +181,8 @@ export default {
   padding: 7px 12px;
   border-color: #2496ed;
 }
+.border {
+  border: 2px solid #1e2b48 !important;
+}
 
 </style>
