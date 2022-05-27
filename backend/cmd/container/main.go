@@ -230,10 +230,13 @@ func ListContainerHistory(containerId string) []config.Container {
 
 	for _, containerScan := range containerScans {
 		// format the date
-		containerScan.CreatedAt, err = time.Parse("2006-01-02", containerScan.CreatedAt.String())
+		parsedTime, err := time.Parse("022-05-27 15:13:05.127725054 +0200 EET ", containerScan.CreatedAt)
+		fmt.Println("================ parsedTime", parsedTime)
 		if err != nil {
 			fmt.Println(err)
 		}
+		//containerScan.CreatedAt = parsedTime.Format("2006-01-02 12:51:54 ")
+		//fmt.Println("=========== Formatted Time", containerScan.CreatedAt)
 	}
 
 	return containerScans
