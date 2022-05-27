@@ -1,11 +1,8 @@
 package config
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 type Container struct {
-	gorm.Model
-	Name string `json:"name"`
-	Scan string `json:"scan"`
+	ID        uint   `gorm:"primary_key"`
+	Name      string `json:"name"`
+	Scan      string `json:"scan"`
+	CreatedAt string `json:"CreatedAt"`
 }

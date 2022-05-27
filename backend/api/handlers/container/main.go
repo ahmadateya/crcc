@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"math"
+	"time"
 )
 
 func List(c *gin.Context) {
@@ -167,9 +168,11 @@ func storeAnalysis(containerId string, results models.ScanDataResponse) error {
 		return err
 	}
 
+	loc, _ := time.LoadLocation("Africa/Cairo")
 	containerRecord := config.Container{
-		Name: containerId,
-		Scan: string(scanJsonData),
+		Name:      containerId,
+		Scan:      string(scanJsonData),
+		CreatedAt: time.Now().In(loc).String(),
 	}
 	db.Create(&containerRecord) // pass pointer of data to Create
 	return nil
