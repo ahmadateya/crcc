@@ -114,8 +114,8 @@
   </div>
 </template>
 <script>
-import LoadingBar from "~/components/LoadingBar";
-import ViewContainer from "~/components/ViewContainer";
+import LoadingBar from "@/components/LoadingBar";
+import ViewContainer from "@/components/ViewContainer";
 import { BIcon } from 'bootstrap-vue'
 
 import Jsona from 'jsona';
