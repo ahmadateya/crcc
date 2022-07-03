@@ -54,3 +54,10 @@ type ContainerPorts struct {
 	Description string `json:"description"`
 	Impact string `json:"impact"`
 }
+
+type ContainerDns struct{
+	Dns string `json:"dns"`
+	White bool `json:"white"`
+	Description string `json:"description"`
+	Impact string `json:"impact"`
+}

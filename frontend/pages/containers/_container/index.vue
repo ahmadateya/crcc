@@ -31,12 +31,27 @@
                 <h1 class="mb-0 bold ">{{ container.name }} </h1>
               </div>
               <div class="col-xl-3">
+                <div class="input-group mb-3">
+  <input id="cnninput" type="text" class="form-control" placeholder="Enter A Path" aria-label="CNN Scan" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <base-button size="lg"
+                            @click="cnnScan"
+                             
+                             class="scan-button"
+                >
+                  CNN Scan
+                </base-button>
+  </div>
+</div>
+                
                 <base-button size="lg"
                              @click="scanContainer"
                              class="scan-button"
                 >
                   Scan
                 </base-button>
+
+                
 
                   <a type="button" class="btn history-button"
                      :href="'/containers' + container.name + '/history'">
@@ -124,6 +139,8 @@ import ViewContainer from "@/components/ViewContainer";
 import {BIcon} from 'bootstrap-vue'
 
 import Jsona from 'jsona';
+import BaseInput from "../../../components/argon-core/Inputs/BaseInput.vue";
+import BaseAlert from "../../../components/argon-core/BaseAlert.vue";
 
 const url = process.env.apiUrl;
 const jsona = new Jsona();
@@ -135,7 +152,9 @@ export default {
     BIcon,
     ViewContainer,
     LoadingBar,
-  },
+    BaseInput,
+    BaseAlert
+},
   data() {
     return {
       container: {},
@@ -170,6 +189,7 @@ export default {
   },
   methods: {
     async scanContainer() {
+      this.scanData=[];
       this.isScanned = true;
       this.$nuxt.$loading.start()
 
@@ -197,6 +217,44 @@ export default {
             this.loaded.error = "Error while requesting data please try again.";
             console.log(err, "error");
           });
+    },
+    async cnnScan(){
+      
+     
+      
+      if(document.getElementById("cnninput").value==="" || document.getElementById("cnninput").value===undefined){
+        return
+      }
+      this.scanData=[];
+      this.isScanned=true;
+      this.$nuxt.$loading.start();
+
+      await this.$axios.get("http://172.21.0.4:5001/container/cnnscan?container=6c3e8d39dbe5"+
+      "&path="+document.getElementById("cnninput").value).then(response=>{
+        if (response.status !== 200) {
+              this.loaded.responseError = true;
+              return;
+            }
+        this.scanData = response.data;
+            this.chartData = {
+              labels: ['Failed', 'Passed'],
+              datasets: [
+                {
+                  backgroundColor: ['#DD1B16', '#41B883'],
+                  data: [100-this.scanData.compliance, this.scanData.compliance],
+                },
+              ],
+            };
+            
+            this.isScanned = true;
+            this.$nuxt.$loading.finish()
+          }).catch((err) => {
+            this.$nuxt.$loading.finish()
+            this.isScanned = false;
+            this.loaded.error = "Error while requesting data please try again.";
+            console.log(err, "error");
+          });
+
     }
   }
 };

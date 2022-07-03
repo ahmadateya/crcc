@@ -1,0 +1,10 @@
+Flask
+Flask-GraphQL
+Flask-GraphQL-Auth
+Flask-Login
+Flask-SQLAlchemy
+Flask-WTF
+opencv-python
+tensorflow
+numpy
+matplotlib

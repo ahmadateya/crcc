@@ -23,6 +23,22 @@ func getContainerRoutes(r *gin.Engine) {
 	r.GET("/containers/:container", container.Show)
 	r.GET("/containers/:container/scan", container.Scan)
 	r.GET("/containers/:container/history", container.History)
+	r.GET("/processesrules",container.GetProcesses)
+	r.GET("/filesrules",container.GetFiles)
+	r.GET("/networkrules",container.GetPorts)
+	r.GET("/dnsrules",container.GetDNS)
+	r.POST("/addprocess",container.AddProcess)
+	r.POST("/addfile",container.AddFile)
+	r.POST("/addport",container.AddPort)
+	r.POST("/adddns",container.AddDns)
+	r.DELETE("/deleteprocess/:index",container.DeleteProcess)
+	r.DELETE("/deletefile/:index",container.DeleteFile)
+    r.DELETE("/deleteport/:index",container.DeletePort)
+	r.DELETE("/deleteDns/:index",container.DeleteDns)
+	r.PUT("/editprocess/:index",container.EditProcess)
+	r.PUT("/editfile/:index",container.EditFile)
+	r.PUT("/editport/:index",container.EditPort)
+	r.PUT("/editdns/:index",container.EditDns)
 }
 
 func getDummyRoutes(r *gin.Engine) {

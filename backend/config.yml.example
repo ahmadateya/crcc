@@ -1,5 +1,5 @@
 database:
-  connection: 'host=postgres-dev port=5432 password=123 user=gis dbname=gis sslmode=disable'
+  connection: 'host=db port=5432 password=123 user=crcc_user dbname=crcc_db sslmode=disable'
   dropTables: true
   seedData: true
 

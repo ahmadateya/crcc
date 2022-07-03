@@ -56,7 +56,7 @@
         <!-- Containers Table-->
         <div class="row">
           <div class="col-xl-12">
-            <main-table v-if="containers.length!==0" :rows="containers"/>
+            <main-table v-if="containers.length!==0" :rows="containers" title="Running Containers"/>
             <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
             <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
             <h2 v-else-if="loaded.length===0">No Running Containers</h2>
@@ -190,6 +190,8 @@ import { map } from 'd3';
 const url = process.env.apiUrl;
 const jsona = new Jsona();
 
+
+
 export default {
   layout: 'DashboardLayout',
 
@@ -273,10 +275,14 @@ export default {
       },
     }
   },
+  
   async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
+     
+     
      await this.$axios.get(`${url}/containers`)
          .then(response => {
+          
            if(response.status!==200){
              this.loaded.responseError=true;
              return;
@@ -290,18 +296,9 @@ export default {
         }).catch(err=> {
           this.loaded.error="Error while requesting data please try again."
         });
+        
   },
-  // methods: {
-  //   async getProfile() {
-  //     awiat this.$axios.get(`${url}/containers`)
-  //       .then(response => {
-  //         console.log(response.data);
-  //         return {
-  //         data: jsona.deserialize(response.data),
-  //       };
-  //   });
-  //   }
-  // }
+ 
   methods: {
     initBigChart(index) {
       let chartData = {
@@ -366,6 +363,7 @@ export default {
   },
   mounted() {
     this.initBigChart(0);
-  },
+    
+  }
 };
 </script>

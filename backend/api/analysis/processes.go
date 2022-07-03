@@ -38,7 +38,9 @@ func ProcessesAnalysisByRegex(processes models.ContainerProcesses) ([]models.Con
 		for _, malProcess := range currentMalProcesses {
 			re, _ := regexp.Compile(malProcess.Cmd)
 			match := re.FindStringIndex(process[len(process)-1])
-			if len(match) != 0 {
+			if len(match) != 0 && malProcess.User==""{
+				checkProcessTypeScan(&malProcess, &malProcesses, &process)
+			}else if len(match) != 0 && malProcess.User == process[0]{
 				checkProcessTypeScan(&malProcess, &malProcesses, &process)
 			}
 		}

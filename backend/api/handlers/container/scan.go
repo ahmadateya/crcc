@@ -3,6 +3,7 @@ package container
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/ahmadateya/crcc/api/analysis"
 	"github.com/ahmadateya/crcc/api/models"
 	containerPkg "github.com/ahmadateya/crcc/cmd/container"
@@ -109,6 +110,41 @@ func applyProcessAnalysis(containerId string) (models.ScanResult, error) {
 		var detailsString string
 		marshalPorts, _ := json.Marshal(malProcesses)
 		detailsString = string(marshalPorts)
+		scanResult.Passed = false
+		scanResult.Details = detailsString
+	} else {
+		scanResult.Passed = true
+		scanResult.Details = ""
+	}
+	return scanResult, nil
+}
+
+func applyDnsAnalysis(containerId string) (models.ScanResult, error) {
+	// initialize scan result object
+	var scanResult models.ScanResult
+	scanResult.Title = "DNS Analysis"
+
+	// get container processes
+	contaienrDns, err := containerPkg.ListContainerDns(containerId)
+	if err != nil {
+		fmt.Printf("Error getting container dns: %s\n", err)
+		return scanResult, err
+	}
+
+	fmt.Printf("############## Container dns: %v\n", contaienrDns)
+	// search for malicious processes
+	malDns, err := analysis.DnsScan(contaienrDns)
+	if err != nil {
+		fmt.Printf("Error analyzing container dns: %s\n", err)
+		return scanResult, err
+	}
+
+	// formatting scan result
+	if len(malDns) != 0 {
+		// just a POC change this later
+		var detailsString string
+		marshalDns, _ := json.Marshal(malDns)
+		detailsString = string(marshalDns)
 		scanResult.Passed = false
 		scanResult.Details = detailsString
 	} else {

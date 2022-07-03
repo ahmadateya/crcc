@@ -35,6 +35,7 @@
     "lodash": "^4.17.20",
     "nouislider": "^12.1.0",
     "nuxt": "^2.11.0",
+    "nuxt-sweetalert2": "^1.0.0",
     "perfect-scrollbar": "^1.3.0",
     "qs": "^6.9.4",
     "quill": "^1.3.6",
@@ -48,7 +49,8 @@
     "vue-password-strength-meter": "^1.7.2",
     "vue-toast-notification": "^0.5.0",
     "vue2-transitions": "^0.2.3",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "vue-sweetalert2": "^5.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

@@ -1,0 +1,324 @@
+<template>
+  <div>
+    <!-- Base Header -->
+    <base-header class="pb-6">
+      <h1 class="h1"
+          style="font-size: 2.5rem;
+                  font-weight: 700; padding: 10px; color: black; text-align: center">
+        Container Runtime Compliance Checker
+      </h1>
+
+     <div  class="col-xl-15" style="text-align: center;">
+            
+            <!-- Via multiple directive modifiers -->
+            <div v-on:click="checkToggle()" class="element" style="text-align: center;"
+            >
+              <b-button  v-b-toggle="'collapse-' + '-details'"
+                        id="collapse"
+                        class="align-center w-75 p-3 mb-1 passed"
+                        
+              >
+                
+                Add Process
+              </b-button>
+              <div >
+                <b-collapse :id="'collapse-'  + '-details'" class="mt-2">
+                  <!--    details is an array of objects  -->
+                  
+                  <b-card-text >
+                    <div class="input-group">
+  
+  <input id="cmd" type="text" class="form-control" placeholder="CMD: You can put it as regex">
+  <input id="user" type="text" class="form-control" placeholder="User">
+  <input id="impact" type="text" class="form-control" placeholder="Impact">
+  <input id="desc" type="text" class="form-control" placeholder="Description">
+  <div class="input-group-prepend">
+     <base-button size="md"
+                            @click="edit? editRule(): addProcess()"
+                             
+                             class="scan-button"
+                >
+                  {{ edit? 'Edit Rule' : 'Add Rule' }}
+                </base-button>
+  </div>
+</div>
+                  </b-card-text>
+                </b-collapse>
+              </div>
+            </div>
+          </div>
+
+
+      
+    </base-header>
+    <!-- End Base Header -->
+
+    <!--  Main Section in the Page  -->
+    
+    <div class="container-fluid">
+      <div class="mt--6">
+        <!-- Containers Table-->
+        <div class="row">
+          <div class="col-xl-12">
+            <main-table @edit="updateToggle" v-if="processes.length!==0" :rows="processes" title="Processes Rules"/>
+            <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
+            <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
+            <h2 v-else-if="loaded.length===0">No Running Containers</h2>
+          </div>
+
+          <!--  Pie chart   -->
+          
+          <!--  end Pie chart   -->
+
+
+        </div>
+        <!-- End Containers Table-->
+    
+        <!--Charts-->
+<!--        <div class="row">-->
+<!--          <div class="col-xl-8">-->
+<!--            <card type="default" header-classes="bg-transparent">-->
+<!--              <div slot="header" class="row align-items-center">-->
+<!--                <div class="col">-->
+<!--                  <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>-->
+<!--                  <h5 class="h3 text-white mb-0">Sales value</h5>-->
+<!--                </div>-->
+<!--                <div class="col">-->
+<!--                  <ul class="nav nav-pills justify-content-end">-->
+<!--                    <li class="nav-item mr-2 mr-md-0">-->
+<!--                      <a-->
+<!--                          class="nav-link py-2 px-3"-->
+<!--                          href="#"-->
+<!--                          :class="{ active: bigLineChart.activeIndex === 0 }"-->
+<!--                          @click.prevent="initBigChart(0)"-->
+<!--                      >-->
+<!--                        <span class="d-none d-md-block">Month</span>-->
+<!--                        <span class="d-md-none">M</span>-->
+<!--                      </a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                      <a-->
+<!--                          class="nav-link py-2 px-3"-->
+<!--                          href="#"-->
+<!--                          :class="{ active: bigLineChart.activeIndex === 1 }"-->
+<!--                          @click.prevent="initBigChart(1)"-->
+<!--                      >-->
+<!--                        <span class="d-none d-md-block">Week</span>-->
+<!--                        <span class="d-md-none">W</span>-->
+<!--                      </a>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <line-chart-->
+<!--                  :height="350"-->
+<!--                  ref="bigChart"-->
+<!--                  :chart-data="bigLineChart.chartData"-->
+<!--                  :extra-options="bigLineChart.extraOptions"-->
+<!--              >-->
+<!--              </line-chart>-->
+<!--            </card>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- End charts-->
+      </div>
+    </div>
+    <!--  End Main Section in the Page  -->
+  </div>
+</template>
+<script>
+// Charts
+import * as chartConfigs from "@/components/argon-core/Charts/config";
+import LineChart from "@/components/argon-core/Charts/LineChart";
+import BarChart from "@/components/argon-core/Charts/BarChart";
+import PieChart from "@/components/argon-core/Charts/PieChart";
+import StatsCard from "@/components/argon-core/Cards/StatsCard";
+
+// tables
+import MainTable from "~/components/tables/RegularTables/MainTable";
+import Jsona from 'jsona';
+import { map } from 'd3';
+const url = process.env.apiUrl;
+const jsona = new Jsona();
+
+export default {
+  layout: 'DashboardLayout',
+
+  components: {
+    MainTable,
+    LineChart,
+    BarChart,
+    StatsCard,
+    PieChart,
+  },
+  data() {
+    return {
+      // containers related data
+      processes: [{cmd:"ff",user: "root",desc:"ff",impact:"gg"}], 
+      loaded:{},
+      valid:true,
+      edit: false,
+      editIndex: -1,
+      // charts related data
+      bigLineChart: {
+        allData: [
+          [0, 20, 10, 30, 15, 40, 20, 60, 60],
+          [0, 20, 5, 25, 10, 30, 15, 40, 40],
+        ],
+        activeIndex: 0,
+        chartData: {
+          datasets: [
+            {
+              label: "Performance",
+              data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
+            },
+          ],
+          labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        },
+        extraOptions: chartConfigs.blueChartOptions,
+      },
+      redBarChart: {
+        chartData: {
+          labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+              label: "Sales",
+              data: [25, 20, 30, 22, 17, 100],
+            },
+          ],
+        },
+      },
+      pieChart: {
+        chartData: {
+          labels: [],
+          datasets: [
+            {
+              //backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+              data: [25, 20, 30, 22, 17, 100],
+            },
+          ],
+        }
+      },
+      networksPieChart: {
+        chartData: {
+          labels: [],
+          datasets: [
+            {
+              //backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+              data: [25, 20, 30, 22, 17, 100],
+            },
+          ],
+        }
+      },
+      statusPieChart: {
+        chartData: {
+          labels: [],
+          datasets: [
+            {
+              //backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+              data: [25, 20, 30, 22, 17, 100],
+            },
+          ],
+        }
+      },
+    }
+  },
+  async fetch() {
+   // this.containers = await this.$axios.$get(`${url}/containers`);
+     await this.$axios.get(`${url}/processesrules`)
+         .then(response => {
+           if(response.status!==200){
+             this.loaded.responseError=true;
+             return;
+           }
+           this.processes=response.data;
+           if(this.processes.length===0){
+             this.loaded.length=0;
+           }
+           
+           
+        }).catch(err=> {
+          this.loaded.error="Error while requesting data please try again."
+        });
+  },
+  // methods: {
+  //   async getProfile() {
+  //     awiat this.$axios.get(`${url}/containers`)
+  //       .then(response => {
+  //         console.log(response.data);
+  //         return {
+  //         data: jsona.deserialize(response.data),
+  //       };
+  //   });
+  //   }
+  // }
+  methods: {
+  async addProcess(){
+    if(document.getElementById("cmd").value != "" 
+    != undefined && document.getElementById("impact").value != "" ){
+  var data={cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
+      description: document.getElementById("desc").value , impact:document.getElementById("impact").value};
+
+      await this.$axios.post(`${url}/addprocess`,data)
+         .then(response => {
+           if(response.status!==200){
+             //this.loaded.responseError=true;
+             return;
+           }
+           
+           this.processes.push({cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
+      desc: document.getElementById("desc").value , impact:document.getElementById("impact").value})
+           
+        }).catch(err=> {
+          //this.loaded.error="Error while requesting data please try again."
+        });
+      
+    }
+  },
+  checkToggle(){
+    if (document.getElementById("collapse").classList.contains("collapsed")){
+      this.edit=false
+    document.getElementById("cmd").value="";
+    document.getElementById("user").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("impact").value="";
+    }
+  },
+  updateToggle(value){
+    
+    if (document.getElementById("collapse").classList.contains("collapsed")){
+      document.getElementById("collapse").click();
+      
+    }
+    document.getElementById("cmd").value=value.row.cmd;
+    document.getElementById("user").value=value.row.user;
+    document.getElementById("desc").value=value.row.description;
+    document.getElementById("impact").value=value.row.impact;
+    this.edit=true;
+    this.editIndex=value.index;
+      },
+      async editRule(){
+      if(document.getElementById("cmd").value != "" 
+    != undefined && document.getElementById("impact").value != "" ){
+  var data={cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
+      description: document.getElementById("desc").value , impact:document.getElementById("impact").value};
+
+      await this.$axios.put(`${url}/editprocess/`+this.editIndex,data)
+         .then(response => {
+           if(response.status!==200){
+             //this.loaded.responseError=true;
+             return;
+           }
+           
+           this.processes=response.data
+           
+        }).catch(err=> {
+          //this.loaded.error="Error while requesting data please try again."
+        });
+      
+    }
+  }
+  },
+  
+};
+</script>

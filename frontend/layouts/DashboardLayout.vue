@@ -11,6 +11,30 @@
           }"
         >
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'View Processes Rules',
+            icon: 'ni ni-shop text-primary',
+            path: '/processes',
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'View Files Rules',
+            icon: 'ni ni-shop text-primary',
+            path: '/files',
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'View Network Rules',
+            icon: 'ni ni-shop text-primary',
+            path: '/ports',
+          }"
+        >
+        </sidebar-item>
 
 <!--        <sidebar-item-->
 <!--          opened-->

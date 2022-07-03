@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/ahmadateya/crcc/api/models"
 	"github.com/ahmadateya/crcc/config"
 	"github.com/jinzhu/gorm"
-	"io/ioutil"
-	"net/http"
 )
 
 // Container package to handle container related business
@@ -139,15 +140,9 @@ func ListContainerOpenPorts(containerId string) (string, error) {
   "DetachKeys": "ctrl-p,ctrl-q",
   "Tty": false,
   "Cmd": [
-    "netstat",
-        " -anlp",
-        " |",
-        " grep",
-        " -iv",
-        " 'unix'",
-        " |",
-        " awk",
-        " '{print $4,7}'"
+    "bash",
+      "-c",
+    "netstat -anlp | grep -iv 'unix' | awk '{print $4,$7}'"
 
   ],
   "Env": [
@@ -168,8 +163,9 @@ func ListContainerDns(containerId string) (string, error) {
   "DetachKeys": "ctrl-p,ctrl-q",
   "Tty": false,
   "Cmd": [
-    "cat",
-	"/etc/resolv.conf"
+    "bash",
+	"-c",
+    "head -n -1 /etc/resolv.conf"
   ],
   "Env": [
     "FOO=bar",
@@ -201,7 +197,7 @@ func RunContainerCommands(containerId string, command []byte) (string, error) {
 	body, _ := ioutil.ReadAll(response.Body)
 	var requestData models.CreateExec
 	json.Unmarshal([]byte(body), &requestData)
-
+    
 	urlForStartingExec := fmt.Sprintf("%s:%s/exec/%s/start", viper.App.Docker.Host, viper.App.Docker.Port, requestData.Id)
 	response, err = http.Post(urlForStartingExec, "application/json", bytes.NewBuffer(startExecRequestData))
 
@@ -210,7 +206,7 @@ func RunContainerCommands(containerId string, command []byte) (string, error) {
 	}
 	defer response.Body.Close()
 	body, _ = ioutil.ReadAll(response.Body)
-
+    
 	return string(body), nil
 }
 

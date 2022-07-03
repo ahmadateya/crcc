@@ -12,7 +12,22 @@ services:
     depends_on:
      - db
     networks:
-      - crcc-docker-network
+     - crcc-docker-network
+  
+  cnnmodel:
+    build: cnnmodel
+    env_file: .env
+    container_name: ${CNNModel_CONTAINER_NAME}
+    volumes:
+      - ./cnnmodel:/cnnmodel
+    command: sh entrypoint.sh
+    ports:
+      - 5001:5001 # exposed without the proxy
+    depends_on:
+     - db
+    networks:
+     - crcc-docker-network
+
 
   db:
     env_file: .env
@@ -25,7 +40,7 @@ services:
       POSTGRES_PASSWORD: '123'
       POSTGRES_DB: 'crcc_db'
     volumes:
-      - "./.docker-data/dbdata:/var/lib/postgresql/data"
+      - ./.docker-data/dbdata:/var/lib/postgresql/data
     networks:
      - crcc-docker-network
 
@@ -46,3 +61,4 @@ networks:
     name: ${DOCKER_NETWORK_NAME}
     external: true
     driver: bridge
+

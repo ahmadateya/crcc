@@ -29,7 +29,7 @@ module.exports = {
   mode: "spa",
   router: {
     base: "/",
-    linkExactActiveClass: "active"
+    linkExactActiveClass: "active",
   },
   meta: {
     ogType: false,
@@ -52,108 +52,107 @@ module.exports = {
         hid: "description",
         name: "description",
         content:
-          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design.",
       },
       {
         name: "keywords",
         content:
-            "creative tim, updivision, html dashboard, nuxt, laravel, vue, vuejs, json:api, json, api, html css dashboard laravel, nuxt argon dashboard laravel, nuxt argon dashboard, argon admin, nuxt dashboard, nuxt admin, web dashboard, bootstrap 4 dashboard laravel, bootstrap 4, css3 dashboard, bootstrap 4 admin laravel, argon dashboard bootstrap 4 laravel, frontend, responsive bootstrap 4 dashboard, argon dashboard, argon laravel bootstrap 4 dashboard"
+          "creative tim, updivision, html dashboard, nuxt, laravel, vue, vuejs, json:api, json, api, html css dashboard laravel, nuxt argon dashboard laravel, nuxt argon dashboard, argon admin, nuxt dashboard, nuxt admin, web dashboard, bootstrap 4 dashboard laravel, bootstrap 4, css3 dashboard, bootstrap 4 admin laravel, argon dashboard bootstrap 4 laravel, frontend, responsive bootstrap 4 dashboard, argon dashboard, argon laravel bootstrap 4 dashboard",
       },
       {
         itemprop: "name",
-        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION"
+        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION",
       },
       {
         itemprop: "description",
         content:
-            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design.",
       },
       {
         itemprop: "image",
         content:
-            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg",
       },
       {
         name: "twitter:card",
-        content: "product"
+        content: "product",
       },
       {
         name: "twitter:site",
-        content: "@creativetim"
+        content: "@creativetim",
       },
       {
         name: "twitter:title",
-        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION"
+        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION",
       },
       {
         name: "twitter:description",
         content:
-            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design.",
       },
       {
         name: "twitter:creator",
-        content: "@creativetim"
+        content: "@creativetim",
       },
       {
         name: "twitter:image",
         content:
-            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg",
       },
       {
         property: "fb:app_id",
-        content: "655968634437471"
+        content: "655968634437471",
       },
       {
         property: "og:title",
-        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION"
+        content: "Nuxt Argon Dashboard Laravel by Creative Tim & UPDIVISION",
       },
       {
         property: "og:type",
-        content: "article"
+        content: "article",
       },
       {
         property: "og:url",
         content:
-            "https://www.creative-tim.com/live/nuxt-argon-dashboard-laravel"
+          "https://www.creative-tim.com/live/nuxt-argon-dashboard-laravel",
       },
       {
         property: "og:image",
         content:
-            "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg"
+          "https://s3.amazonaws.com/creativetim_bucket/products/350/original/opt_ad_nuxt_laravel_thumbnail.jpg",
       },
       {
         property: "og:description",
         content:
-            "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design."
+          "Nuxt Argon Dashboard Laravel comes with an API-powered Laravel backend, a Nuxt frontend and an awesome-looking Argon design.",
       },
       {
         property: "og:site_name",
-        content: "Creative Tim"
-      }
+        content: "Creative Tim",
+      },
     ],
     link: [
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       {
         rel: "stylesheet",
         href:
-            "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+          "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700",
       },
       {
         rel: "stylesheet",
         href: "https://use.fontawesome.com/releases/v5.6.3/css/all.css",
         integrity:
-            "sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/",
-        crossorigin: "anonymous"
-      }
-    ]
+          "sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/",
+        crossorigin: "anonymous",
+      },
+    ],
   },
   components: true,
 
   /*
    ** Customize the progress-bar color
    */
-  loading: '~/components/LoadingBar.vue',
-
+  loading: "~/components/LoadingBar.vue",
 
   /*
    ** Global CSS
@@ -161,7 +160,7 @@ module.exports = {
   css: [
     "assets/css/nucleo/css/nucleo.css",
     "assets/sass/argon.scss",
-    "~assets/css/style.css"
+    "~assets/css/style.css",
   ],
   //
   // router: {
@@ -188,13 +187,18 @@ module.exports = {
     "@nuxtjs/toast",
     // Doc: https://bootstrap-vue.js.org/docs/
     "bootstrap-vue/nuxt",
+    
   ],
   /*
-  ** Disabling Bootstrap Compiled CSS
-  */
+   ** Disabling Bootstrap Compiled CSS
+   */
+  sweetalert: {
+    confirmButtonColor: "#41b882",
+    cancelButtonColor: "#ff7674",
+  },
   bootstrapVue: {
     bootstrapCSS: false,
-    bootstrapVueCSS: false
+    bootstrapVueCSS: false,
   },
 
   /*
@@ -209,23 +213,23 @@ module.exports = {
           login: {
             url: "login",
             method: "post",
-            propertyName: "access_token"
+            propertyName: "access_token",
           },
           logout: { url: "/logout", method: "post" },
           user: {
             url: "/me",
             method: "get",
-            propertyName: false
-          }
-        }
+            propertyName: false,
+          },
+        },
       },
       redirect: {
         login: "/login",
         logout: "/",
         callback: "/login",
-        home: "/dashboard"
-      }
-    }
+        home: "/dashboard",
+      },
+    },
   },
 
   /*
@@ -247,10 +251,10 @@ module.exports = {
         name: "my-error",
         message: "Oops...Something went wrong",
         options: {
-          type: "error"
-        }
-      }
-    ]
+          type: "error",
+        },
+      },
+    ],
   },
 
   /*
@@ -262,18 +266,18 @@ module.exports = {
     headers: {
       common: {
         Accept: "application/vnd.api+json",
-        "content-type": "application/vnd.api+json"
+        "content-type": "application/vnd.api+json",
       },
       post: {
-        "content-type": "application/vnd.api+json"
+        "content-type": "application/vnd.api+json",
       },
       patch: {
-        "content-type": "application/vnd.api+json"
+        "content-type": "application/vnd.api+json",
       },
       delete: {
-        "content-type": "application/vnd.api+json"
-      }
-    }
+        "content-type": "application/vnd.api+json",
+      },
+    },
   },
 
   /*
@@ -292,10 +296,10 @@ module.exports = {
           "component",
           {
             libraryName: "element-ui",
-            styleLibraryName: "theme-chalk"
-          }
-        ]
-      ]
-    }
-  }
+            styleLibraryName: "theme-chalk",
+          },
+        ],
+      ],
+    },
+  },
 };

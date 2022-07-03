@@ -1,17 +1,1 @@
-[
-  {
-    "Port": "4156",
-    "Description": "Linux.Slapper.Worm family of worms potentialy running on this port",
-    "Impact": "High"
-  },
-  {
-    "Port": "7222",
-    "Description": "Lupper worm potentialy running on this port",
-    "Impact": "High"
-  },
-  {
-    "Port": "23432",
-    "Description": "Asylum trojan maybe running on this port",
-    "Impact": "High"
-  }
-]
+[{"port":"4156","description":"Linux.Slapper.Worm family of worms potentialy running on this port","impact":"Medium"},{"port":"7222","description":"Lupper worm potentialy running on this port","impact":"Medium"},{"port":"23432","description":"Asylum trojan maybe running on this port","impact":"Medium"},{"port":"31337","description":"ADAMworm maybe running on this port","impact":"Medium"},{"port":"23432","description":"LinuxRootkitIV maybe running on this port","impact":"Medium"},{"port":"5555","description":"one","impact":"medium"}]
