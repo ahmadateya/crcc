@@ -31,7 +31,7 @@
       "
                        min-width="200px"
                        prop="status"
-                       width="250"
+                       width="200"
                        sortable>
         <template v-slot="{row}">
           
@@ -45,7 +45,9 @@
 
       <el-table-column :label="title == 'Running Containers'? 'Image' : title == 'Processes Rules'? 'User' :
       title == 'Files Rules' || title == 'Network Rules' ? 'Description': title == 'DNS Whitelist Rules'?'Description':'' "
-        sortable>
+                       min-width="200px"
+                       width="200"
+                       sortable>
         <template v-slot="{row}">
           {{  title=="Running Containers"? row.image: title == 'Processes Rules'? row.user 
           :
@@ -54,7 +56,7 @@
       </el-table-column>
 
       <el-table-column  :label="title == 'Running Containers'? 'Id' 
-      : title == 'Processes Rules'? 'Desc' : 
+      : title == 'Processes Rules'? 'Description' :
       title == 'Files Rules' || title == 'Network Rules' || title == 'DNS Whitelist Rules' ? 'Impact': ''"
         sortable>
         <template v-slot="{row}">
@@ -64,8 +66,10 @@
       </el-table-column>
 
       <el-table-column v-if="title == 'Processes Rules' || title == 'DNS Whitelist Rules'" :label="title == 'Processes Rules'?
-      Impact : ''"
-        sortable>
+      'Impact' : ''"
+                       min-width="200px"
+                       width="150"
+                       sortable>
         <template v-slot="{row}">
           {{ title == 'Processes Rules' ? row.impact : title == 'DNS Whitelist Rules' ? row.white:'' }}
         </template>
@@ -79,7 +83,7 @@
                              @click="title == 'Processes Rules' ? deleteProcess(scope.$index) : 
                              title == 'Files Rules' ? deleteFile(scope.$index): title == 
                              'Network Rules' ? deletePort(scope.$index) : deleteDns(scope.$index)"
-                             class="scan-button"
+                             class="btn-default"
                 >
                   Delete
                 </base-button>

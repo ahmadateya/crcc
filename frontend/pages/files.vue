@@ -15,7 +15,7 @@
             >
               <b-button v-b-toggle="'collapse-' + '-details'"
                         id="collapse"
-                        class="align-center w-75 p-3 mb-1  passed"
+                        class="align-center w-75 p-3 mb-1  passed btn-default"
                         
               >
                 

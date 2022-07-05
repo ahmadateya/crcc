@@ -6,42 +6,42 @@
         <sidebar-item
           :link="{
             name: 'Dashboard',
-            icon: 'ni ni-shop text-primary',
+            icon: 'ni ni-app text-primary',
             path: '/dashboard',
           }"
         >
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: 'View Processes Rules',
-            icon: 'ni ni-shop text-primary',
-            path: '/processes',
+            name: 'Settings (Edit Rules) ',
+            icon: 'ni ni-ui-04 bold text-primary',
           }"
-        >
+          >
+          <sidebar-item
+              :link="{
+              name: 'Processes Rules',
+              icon: 'fas fa-poll text-primary',
+              path: '/processes',
+            }"
+          >
+          </sidebar-item>
+          <sidebar-item
+              :link="{
+              name: 'Files Rules',
+              icon: 'fas fa-file-code text-primary',
+              path: '/files',
+            }"
+          >
+          </sidebar-item>
+          <sidebar-item
+              :link="{
+              name: 'Network Rules',
+              icon: 'fas fa-shield-alt text-primary',
+              path: '/ports',
+            }"
+          >
+          </sidebar-item>
         </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: 'View Files Rules',
-            icon: 'ni ni-shop text-primary',
-            path: '/files',
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: 'View Network Rules',
-            icon: 'ni ni-shop text-primary',
-            path: '/ports',
-          }"
-        >
-        </sidebar-item>
-
-<!--        <sidebar-item-->
-<!--          opened-->
-<!--          :link="{-->
-<!--            name: 'Examples (API)',-->
-<!--            icon: 'fab fa-vuejs',-->
-<!--          }"-->
 <!--        >-->
 <!--          <sidebar-item-->
 <!--            opened-->

@@ -15,7 +15,7 @@
             >
               <b-button  v-b-toggle="'collapse-' + '-details'"
                         id="collapse"
-                        class="align-center w-75 p-3 mb-1 passed"
+                        class="align-center w-75 p-3 mb-1 passed btn-default"
                         
               >
                 
@@ -73,7 +73,7 @@
 
         </div>
         <!-- End Containers Table-->
-    
+
         <!--Charts-->
 <!--        <div class="row">-->
 <!--          <div class="col-xl-8">-->
@@ -303,22 +303,21 @@ export default {
   var data={cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
       description: document.getElementById("desc").value , impact:document.getElementById("impact").value};
 
-      await this.$axios.put(`${url}/editprocess/`+this.editIndex,data)
-         .then(response => {
-           if(response.status!==200){
-             //this.loaded.responseError=true;
-             return;
-           }
-           
-           this.processes=response.data
-           
-        }).catch(err=> {
-          //this.loaded.error="Error while requesting data please try again."
-        });
-      
+        await this.$axios.put(`${url}/editport/` + this.editIndex, data)
+            .then(response => {
+              if (response.status !== 200) {
+                //this.loaded.responseError=true;
+                return;
+              }
+
+              this.ports = response.data
+
+            }).catch(err => {
+              //this.loaded.error="Error while requesting data please try again."
+            });
+
+      }
     }
   }
-  },
-  
 };
 </script>
