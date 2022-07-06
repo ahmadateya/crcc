@@ -102,7 +102,7 @@ func Scan(c *gin.Context) {
 	var scanResponse models.ScanDataResponse
 
 	// apply filesystem analysis to the container
-    fileSystemScan, err := applyFileSystemAnalysis(containerId)
+	fileSystemScan, err := applyFileSystemAnalysis(containerId)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
@@ -129,13 +129,13 @@ func Scan(c *gin.Context) {
 	scanResponse.Results = append(scanResponse.Results, processScan)
 
 	// apply dns analysis to the container
-	dnsScan, err := applyDnsAnalysis(containerId)
-	if err != nil {
-		c.JSON(500, err.Error())
-		return
-	}
+	//dnsScan, err := applyDnsAnalysis(containerId)
+	//if err != nil {
+	//	c.JSON(500, err.Error())
+	//	return
+	//}
 	// append dns analysis to the scan response
-	scanResponse.Results = append(scanResponse.Results, dnsScan)
+	//scanResponse.Results = append(scanResponse.Results, dnsScan)
 	// calc the compliance
 	scanResponse.Compliance = calcCompliance(scanResponse.Results)
 
@@ -198,19 +198,19 @@ func History(c *gin.Context) {
 	c.JSON(200, containerScans)
 }
 
-func StoreCNN(c *gin.Context){
-	containerId := c.Query("container");
+func StoreCNN(c *gin.Context) {
+	containerId := c.Query("container")
 
-	type Data struct{
+	type Data struct {
 		Data models.ScanDataResponse `json:"data"`
 	}
 	var data Data
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	err := storeAnalysis(containerId, data.Data)
 	if err != nil {
@@ -218,18 +218,16 @@ func StoreCNN(c *gin.Context){
 		return
 	}
 
-	c.JSON(200,`{}`)
-	
+	c.JSON(200, `{}`)
+
 }
 
-
-
-func GetProcesses(c *gin.Context){
+func GetProcesses(c *gin.Context) {
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malProcesses.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -241,19 +239,19 @@ func GetProcesses(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalProcesses)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-    c.JSON(200,currentMalProcesses)
+	c.JSON(200, currentMalProcesses)
 }
 
-func GetFiles(c* gin.Context){
+func GetFiles(c *gin.Context) {
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -265,19 +263,19 @@ func GetFiles(c* gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
-    c.JSON(200,currentMalFiles)
+	c.JSON(200, currentMalFiles)
 }
 
-func GetDNS(c *gin.Context){
+func GetDNS(c *gin.Context) {
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malDns.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -289,19 +287,19 @@ func GetDNS(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalDns)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-    c.JSON(200,currentMalDns)
+	c.JSON(200, currentMalDns)
 }
 
-func GetPorts(c* gin.Context){
+func GetPorts(c *gin.Context) {
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malPorts.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -313,26 +311,25 @@ func GetPorts(c* gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalPorts)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
-    c.JSON(200,currentMalPorts)
+	c.JSON(200, currentMalPorts)
 }
 
-func AddProcess(c *gin.Context){
+func AddProcess(c *gin.Context) {
 
-	
 	var data models.ContainerProcess
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    
-	if data.Cmd == "" || data.Impact == ""{
-		c.JSON(400,`{"err": "enter cmd or impact"}`)
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if data.Cmd == "" || data.Impact == "" {
+		c.JSON(400, `{"err": "enter cmd or impact"}`)
 		return
 	}
 
@@ -340,8 +337,8 @@ func AddProcess(c *gin.Context){
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malProcesses.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -353,37 +350,37 @@ func AddProcess(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalProcesses)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	currentMalProcesses = append(currentMalProcesses, data)
-    
-	jsonData,err =json.Marshal(currentMalProcesses)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malProcesses.json",jsonData,0644)
-	
+	jsonData, err = json.Marshal(currentMalProcesses)
+
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malProcesses.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalProcesses)
+	c.JSON(200, currentMalProcesses)
 }
 
-func AddFile(c *gin.Context){
-	
-	var data models.ContainerFile
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+func AddFile(c *gin.Context) {
 
-    if data.File=="" || data.Impact == ""{
-		c.JSON(400,`{"err": "enter File or Impact"}`)
+	var data models.ContainerFile
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if data.File == "" || data.Impact == "" {
+		c.JSON(400, `{"err": "enter File or Impact"}`)
 		return
 	}
 
@@ -391,8 +388,8 @@ func AddFile(c *gin.Context){
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -404,38 +401,37 @@ func AddFile(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	currentMalFiles = append(currentMalFiles, data)
-    
-	jsonData,err =json.Marshal(currentMalFiles)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malfilenames.json",jsonData,0644)
-	
+	jsonData, err = json.Marshal(currentMalFiles)
+
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malfilenames.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalFiles)
+	c.JSON(200, currentMalFiles)
 }
 
-func AddDns(c *gin.Context){
+func AddDns(c *gin.Context) {
 
-	
 	var data models.ContainerDns
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    
-	if data.Dns == ""  {
-		c.JSON(400,`{"err": "enter Dns or impact"}`)
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if data.Dns == "" {
+		c.JSON(400, `{"err": "enter Dns or impact"}`)
 		return
 	}
 
@@ -443,8 +439,8 @@ func AddDns(c *gin.Context){
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malDns.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -456,37 +452,37 @@ func AddDns(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalDns)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	currentMalDns = append(currentMalDns, data)
-    
-	jsonData,err =json.Marshal(currentMalDns)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malDns.json",jsonData,0644)
-	
+	jsonData, err = json.Marshal(currentMalDns)
+
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malDns.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalDns)
+	c.JSON(200, currentMalDns)
 }
 
-func AddPort(c *gin.Context){
-	
-	var data models.ContainerPorts
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+func AddPort(c *gin.Context) {
 
-    if data.Port=="" || data.Impact == ""{
-		c.JSON(400,`{"err": "enter port or impact"}`)
+	var data models.ContainerPorts
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if data.Port == "" || data.Impact == "" {
+		c.JSON(400, `{"err": "enter port or impact"}`)
 		return
 	}
 
@@ -494,8 +490,8 @@ func AddPort(c *gin.Context){
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malPorts.json")
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	defer file.Close()
@@ -507,40 +503,40 @@ func AddPort(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalPorts)
 
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 	currentMalPorts = append(currentMalPorts, data)
-    
-	jsonData,err =json.Marshal(currentMalPorts)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malPorts.json",jsonData,0644)
-	
+	jsonData, err = json.Marshal(currentMalPorts)
+
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malPorts.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalPorts)
+	c.JSON(200, currentMalPorts)
 }
 
-func DeleteProcess(c *gin.Context){
-	index:=c.Param("index")
-    
+func DeleteProcess(c *gin.Context) {
+	index := c.Param("index")
+
 	if index == "" {
-		c.JSON(400,"index is not integer")
+		c.JSON(400, "index is not integer")
 		return
 	}
 
-	dataIndex, _:=strconv.Atoi(index)
+	dataIndex, _ := strconv.Atoi(index)
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malProcesses.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -552,39 +548,39 @@ func DeleteProcess(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalProcesses)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	currentMalProcesses=append(currentMalProcesses[:dataIndex],currentMalProcesses[dataIndex+1:]... )
+	currentMalProcesses = append(currentMalProcesses[:dataIndex], currentMalProcesses[dataIndex+1:]...)
 
-	jsonData,err =json.Marshal(currentMalProcesses)
+	jsonData, err = json.Marshal(currentMalProcesses)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malProcesses.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malProcesses.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalProcesses)
+	c.JSON(200, currentMalProcesses)
 }
 
-func DeleteFile(c *gin.Context){
-	index:=c.Param("index")
-    
+func DeleteFile(c *gin.Context) {
+	index := c.Param("index")
+
 	if index == "" {
-		c.JSON(400,"index is not integer")
+		c.JSON(400, "index is not integer")
 		return
 	}
 
-	dataIndex, _:=strconv.Atoi(index)
+	dataIndex, _ := strconv.Atoi(index)
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -596,39 +592,39 @@ func DeleteFile(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	currentMalFiles=append(currentMalFiles[:dataIndex],currentMalFiles[dataIndex+1:]... )
+	currentMalFiles = append(currentMalFiles[:dataIndex], currentMalFiles[dataIndex+1:]...)
 
-	jsonData,err =json.Marshal(currentMalFiles)
+	jsonData, err = json.Marshal(currentMalFiles)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malfilenames.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malfilenames.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalFiles)
+	c.JSON(200, currentMalFiles)
 }
 
-func DeletePort(c *gin.Context){
-	index:=c.Param("index")
-    
+func DeletePort(c *gin.Context) {
+	index := c.Param("index")
+
 	if index == "" {
-		c.JSON(400,"index is not integer")
+		c.JSON(400, "index is not integer")
 		return
 	}
 
-	dataIndex, _:=strconv.Atoi(index)
+	dataIndex, _ := strconv.Atoi(index)
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malPorts.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -640,39 +636,39 @@ func DeletePort(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalPorts)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	currentMalPorts=append(currentMalPorts[:dataIndex],currentMalPorts[dataIndex+1:]... )
+	currentMalPorts = append(currentMalPorts[:dataIndex], currentMalPorts[dataIndex+1:]...)
 
-	jsonData,err =json.Marshal(currentMalPorts)
+	jsonData, err = json.Marshal(currentMalPorts)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malPorts.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malPorts.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalPorts)
+	c.JSON(200, currentMalPorts)
 }
 
-func DeleteDns(c *gin.Context){
-	index:=c.Param("index")
-    
+func DeleteDns(c *gin.Context) {
+	index := c.Param("index")
+
 	if index == "" {
-		c.JSON(400,"index is not integer")
+		c.JSON(400, "index is not integer")
 		return
 	}
 
-	dataIndex, _:=strconv.Atoi(index)
+	dataIndex, _ := strconv.Atoi(index)
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malDns.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -684,42 +680,42 @@ func DeleteDns(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalDns)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	currentMalDns=append(currentMalDns[:dataIndex],currentMalDns[dataIndex+1:]... )
+	currentMalDns = append(currentMalDns[:dataIndex], currentMalDns[dataIndex+1:]...)
 
-	jsonData,err =json.Marshal(currentMalDns)
+	jsonData, err = json.Marshal(currentMalDns)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malDns.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malDns.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalDns)
+	c.JSON(200, currentMalDns)
 }
 
-func EditFile(c *gin.Context){
-	index:=c.Param("index")
+func EditFile(c *gin.Context) {
+	index := c.Param("index")
 
-	currentIndex,_ :=strconv.Atoi(index)
+	currentIndex, _ := strconv.Atoi(index)
 
-    var data models.ContainerFile
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	var data models.ContainerFile
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malfilenames.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -731,45 +727,45 @@ func EditFile(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalFiles)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	if currentIndex < 0 || currentIndex >= len(currentMalFiles){
-		c.JSON(400,"Rule doesn't exist")
+	if currentIndex < 0 || currentIndex >= len(currentMalFiles) {
+		c.JSON(400, "Rule doesn't exist")
 	}
-	currentMalFiles[currentIndex]=data
-    jsonData,err =json.Marshal(currentMalFiles)
+	currentMalFiles[currentIndex] = data
+	jsonData, err = json.Marshal(currentMalFiles)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malfilenames.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malfilenames.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalFiles)
+	c.JSON(200, currentMalFiles)
 
 }
 
-func EditPort(c *gin.Context){
-	index:=c.Param("index")
+func EditPort(c *gin.Context) {
+	index := c.Param("index")
 
-	currentIndex,_ :=strconv.Atoi(index)
+	currentIndex, _ := strconv.Atoi(index)
 
-    var data models.ContainerPorts
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	var data models.ContainerPorts
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malPorts.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -781,45 +777,45 @@ func EditPort(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalPorts)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	if currentIndex < 0 || currentIndex >= len(currentMalPorts){
-		c.JSON(400,"Rule doesn't exist")
+	if currentIndex < 0 || currentIndex >= len(currentMalPorts) {
+		c.JSON(400, "Rule doesn't exist")
 	}
-	currentMalPorts[currentIndex]=data
-    jsonData,err =json.Marshal(currentMalPorts)
+	currentMalPorts[currentIndex] = data
+	jsonData, err = json.Marshal(currentMalPorts)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malPorts.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malPorts.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalPorts)
+	c.JSON(200, currentMalPorts)
 
 }
 
-func EditProcess(c *gin.Context){
-	index:=c.Param("index")
+func EditProcess(c *gin.Context) {
+	index := c.Param("index")
 
-	currentIndex,_ :=strconv.Atoi(index)
+	currentIndex, _ := strconv.Atoi(index)
 
-    var data models.ContainerProcess
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	var data models.ContainerProcess
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malProcesses.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -831,45 +827,45 @@ func EditProcess(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalProcesses)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	if currentIndex < 0 || currentIndex >= len(currentMalProcesses){
-		c.JSON(400,"Rule doesn't exist")
+	if currentIndex < 0 || currentIndex >= len(currentMalProcesses) {
+		c.JSON(400, "Rule doesn't exist")
 	}
-	currentMalProcesses[currentIndex]=data
-    jsonData,err =json.Marshal(currentMalProcesses)
+	currentMalProcesses[currentIndex] = data
+	jsonData, err = json.Marshal(currentMalProcesses)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malProcesses.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malProcesses.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalProcesses)
+	c.JSON(200, currentMalProcesses)
 
 }
 
-func EditDns(c *gin.Context){
-	index:=c.Param("index")
+func EditDns(c *gin.Context) {
+	index := c.Param("index")
 
-	currentIndex,_ :=strconv.Atoi(index)
+	currentIndex, _ := strconv.Atoi(index)
 
-    var data models.ContainerDns
-    if err := c.ShouldBindJSON(&data); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	var data models.ContainerDns
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malDns.json")
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
 	defer file.Close()
@@ -881,23 +877,23 @@ func EditDns(c *gin.Context){
 	err = json.Unmarshal([]byte(jsonData), &currentMalDns)
 
 	if err != nil {
-		c.JSON(400,err)
+		c.JSON(400, err)
 		return
 	}
-	if currentIndex < 0 || currentIndex >= len(currentMalDns){
-		c.JSON(400,"Rule doesn't exist")
+	if currentIndex < 0 || currentIndex >= len(currentMalDns) {
+		c.JSON(400, "Rule doesn't exist")
 	}
-	currentMalDns[currentIndex]=data
-    jsonData,err =json.Marshal(currentMalDns)
+	currentMalDns[currentIndex] = data
+	jsonData, err = json.Marshal(currentMalDns)
 
-	err =ioutil.WriteFile(getCurrentPath + "/api/analysis/checks/malDns.json",jsonData,0644)
-	
+	err = ioutil.WriteFile(getCurrentPath+"/api/analysis/checks/malDns.json", jsonData, 0644)
+
 	if err != nil {
-		c.JSON(400,err)
-		
+		c.JSON(400, err)
+
 		return
 	}
 
-	c.JSON(200,currentMalDns)
+	c.JSON(200, currentMalDns)
 
 }

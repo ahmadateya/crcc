@@ -63,7 +63,7 @@
             <main-table @edit="updateToggle" v-if="processes.length!==0" :rows="processes" title="Processes Rules"/>
             <h2 v-else-if="loaded.error">Error while fetching data please request it again.</h2>
             <h2 v-else-if="loaded.reponseError">Please make sure of allowing the Rest API.</h2>
-            <h2 v-else-if="loaded.length===0">No Running Containers</h2>
+            <h2 v-else-if="loaded.length===0" style="padding-top: 40px; color: #a80e0e" class="bold" >There is No Rules!</h2>
           </div>
 
           <!--  Pie chart   -->

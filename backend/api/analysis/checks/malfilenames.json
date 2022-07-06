@@ -1,1 +1,7 @@
-[{"file":"g","description":"","impact":"f"}]
+[
+  {
+    "file": "evil.go",
+    "description": "suspicious file",
+    "impact": "High"
+  }
+]
