@@ -140,11 +140,11 @@ func Scan(c *gin.Context) {
 	scanResponse.Compliance = calcCompliance(scanResponse.Results)
 
 	// store the analysis in the database
-	/*err = storeAnalysis(containerId, scanResponse)
+	err = storeAnalysis(containerId, scanResponse)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
-	}*/
+	}
 
 	// return the response
 	c.JSON(200, scanResponse)
