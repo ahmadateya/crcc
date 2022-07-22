@@ -279,7 +279,9 @@ export default {
   async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
      
-     
+     this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
      await this.$axios.get(`${url}/containers`)
          .then(response => {
           
@@ -296,7 +298,7 @@ export default {
         }).catch(err=> {
           this.loaded.error="Error while requesting data please try again."
         });
-        
+        this.$nuxt.$loading.finish()
   },
  
   methods: {

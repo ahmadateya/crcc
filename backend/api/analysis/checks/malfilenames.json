@@ -3,5 +3,20 @@
     "file": "evil.go",
     "description": "suspicious file",
     "impact": "High"
+  },
+  {
+    "file": "7ev3n",
+    "description": "Very well known ransomeware",
+    "impact": "High"
+  },
+  {
+    "file": "9002RAT",
+    "description": "Very malicious RAT malware that controls the  victim machine",
+    "impact": "High"
+  },
+  {
+    "file": "Adhubllka",
+    "description": "Malware classified as ransomware",
+    "impact": "High"
   }
 ]

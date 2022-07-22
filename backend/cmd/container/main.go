@@ -140,7 +140,7 @@ func ListContainerOpenPorts(containerId string) (string, error) {
   "DetachKeys": "ctrl-p,ctrl-q",
   "Tty": false,
   "Cmd": [
-    "bash",
+    "sh",
       "-c",
     "netstat -anlp | grep -iv 'unix' | awk '{print $4,$7}'"
 
@@ -163,9 +163,9 @@ func ListContainerDns(containerId string) (string, error) {
   "DetachKeys": "ctrl-p,ctrl-q",
   "Tty": false,
   "Cmd": [
-    "bash",
+    "sh",
 	"-c",
-    "head -n -1 /etc/resolv.conf"
+    "cat /etc/resolv.conf"
   ],
   "Env": [
     "FOO=bar",

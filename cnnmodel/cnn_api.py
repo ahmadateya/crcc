@@ -8,6 +8,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from sqlalchemy import true
 import load_train1 as train
+import os
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
@@ -63,10 +64,10 @@ def ListContainerSpeceificFiles(container, path):
     }
     request = RunCommandsOnDockerContainer(
         container=container, intializeExec=intializeExec, startExec=startExec)
-
+    
     request = GetFileContent(request.content.decode(
-        "utf-8").split("\n"), container, path)
-    print(request)
+        "utf-8", errors='ignore').split("\n"), container, path)
+    
     return request
 
 
@@ -109,17 +110,21 @@ def GetFileContent(files, container, path):
     if len(predictions["results"][0]["details"]) !=0:
         predictions["results"][0]["passed"]=False
         predictions["compliance"] = 80
-        request=StoreCnn(predictions)
+        predictions["results"][0]["details"] = json.dumps(predictions["results"][0]["details"])
+        '''request=StoreCnn(predictions,container)
         if request.status_code != 200:
-            return request.body
+            print(request.status_code)
+            print(request.content)
+            return jsonify("")'''
 
-    predictions["results"][0]["details"] = json.dumps(predictions["results"][0]["details"])
+    
     return jsonify(predictions)
 
-def StoreCnn(data):
+def StoreCnn(data,container):
     headers = {"Content-Type": "application/json"}
 
-    reauest=requests.post("http://172.17.0.3:8080/container/storecnn",headers=headers,data=data)
+    request = requests.post(
+        "http://172.21.0.4:8080/storecnn/"+container, headers=headers, json=data, verify=False)
 
     return request
 

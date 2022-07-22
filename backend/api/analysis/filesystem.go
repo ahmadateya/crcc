@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/ahmadateya/crcc/api/models"
@@ -74,7 +75,9 @@ func FileAnalysisByNameVersionTwo(files string) ([]models.ContainerFile, error) 
 	for _, file := range fullPath {
 		path := strings.Split(file, "/")
 		for _, malFile := range currentMalFiles{
-			if malFile.File == path[len(path)-1] {
+			re, _ := regexp.Compile(malFile.File)
+			match := re.FindStringIndex(path[len(path)-1])
+			if len(match) != 0 {
 				malFiles = append(malFiles, models.ContainerFile{File: path[len(path)-1],
 				Description: malFile.Description, Impact: malFile.Impact})
 				break

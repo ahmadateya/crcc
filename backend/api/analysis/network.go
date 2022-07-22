@@ -13,7 +13,7 @@ func CheckOpenPorts(ports string) ([]models.ContainerPorts, error) {
 	var fullPorts []string
 	var malPorts []models.ContainerPorts
 	fullPorts = strings.Split(ports, "\n")
-
+    
 	getCurrentPath, _ := os.Getwd()
 	file, err := os.Open(getCurrentPath + "/api/analysis/checks/malPorts.json")
 

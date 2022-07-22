@@ -15,7 +15,7 @@
             >
               <b-button v-b-toggle="'collapse-' + '-details'"
                         id="collapse"
-                        class="align-center w-75 p-3 mb-1  passed"
+                        class="align-center w-75 p-3 mb-1 passed btn-default"
                         
               >
                 
@@ -26,12 +26,15 @@
                   <!--    details is an array of objects  -->
                   
                   <b-card-text >
+                    <form @submit.prevent="edit? editRule(): addDns()">
                     <div class="input-group">
   
   
   <input id="dns" type="text" class="form-control" placeholder="Dns:">
   <input id="desc" type="text" class="form-control" placeholder="Description:">
-  <input id="impact" type="text" class="form-control" placeholder="Impact:">
+  <input id="impact" type="text" class="form-control" placeholder="Impact:"
+  pattern="(high|medium|low)" 
+                  title="Impact have to be one of these : high, medium, low">
   
  <input type="checkbox" class="btn-check" id="btn-check-2-outlined" checked autocomplete="off">
 <label size="md" style="background-color: white; color: black;" class="btn btn-outline-secondary" for="btn-check-2-outlined">White</label><br>
@@ -46,6 +49,7 @@
                 </base-button>
   </div>
 </div>
+</form>
                   </b-card-text>
                 </b-collapse>
               </div>
@@ -103,7 +107,7 @@
 <!--                    <li class="nav-item">-->
 <!--                      <a-->
 <!--                          class="nav-link py-2 px-3"-->
-<!--                          href="#"-->
+<!--                          href="#"--></form>
 <!--                   document.getElementById('your_input_id').validity.valid       :class="{ active: bigLineChart.activeIndex === 1 }"-->
 <!--                          @click.prevent="initBigChart(1)"-->
 <!--                      >-->
@@ -143,6 +147,7 @@ import MainTable from "~/components/tables/RegularTables/MainTable";
 import Jsona from 'jsona';
 import { map } from 'd3';
 import Swal from "sweetalert2";
+
 const url = process.env.apiUrl;
 const jsona = new Jsona();
 
@@ -230,6 +235,9 @@ export default {
   },
  async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
+   this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
      await this.$axios.get(`${url}/dnsrules`)
          .then(response => {
            if(response.status!==200){
@@ -245,6 +253,7 @@ export default {
         }).catch(err=> {
           this.loaded.error="Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
   // methods: {
   //   async getProfile() {
@@ -267,13 +276,15 @@ export default {
          .then(response => {
            if(response.status!==200){
              //this.loaded.responseError=true;
+             Swal.fire({icon:'error',title:"Error Creating The Rule"})
              return;
            }
-           
-           this.dns.push({dns: document.getElementById("dns").value,white:document.getElementById("dns").checked ,
-      desc: document.getElementById("desc").value , impact:document.getElementById("impact").value})
+           Swal.fire({icon:'success',title:"The Rule Created"})
+           this.dns=response.data;
+      
            
         }).catch(err=> {
+          Swal.fire({icon:'error',title:"Error Creating The Rule"})
           //this.loaded.error="Error while requesting data please try again."
         });
       
@@ -298,6 +309,7 @@ export default {
     document.getElementById("impact").value=value.row.impact;
     this.edit=true;
     this.editIndex=value.index;
+    window.scrollTo(0, 0);
       },
       async editRule(){
       if(document.getElementById("dns").value != ""  ){
@@ -308,12 +320,14 @@ export default {
          .then(response => {
            if(response.status!==200){
              //this.loaded.responseError=true;
+             Swal.fire({icon:'error',title:"Error Editing The Rule"})
              return;
            }
-           
+           Swal.fire({icon:'success',title:"The Rule Edited"})
            this.dns=response.data
            
         }).catch(err=> {
+          Swal.fire({icon:'error',title:"Error Editing The Rule"})
           //this.loaded.error="Error while requesting data please try again."
         });
       

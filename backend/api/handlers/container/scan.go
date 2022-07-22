@@ -55,7 +55,7 @@ func applyNetworkAnalysis(containerId string) (models.ScanResult, error) {
 		fmt.Printf("Error getting container opened ports: %s\n", err)
 		return scanResult, err
 	}
-
+    fmt.Println(containerPorts)
 	// search for malicious ports
 	malPorts, err := analysis.CheckOpenPorts(containerPorts)
 	if err != nil {

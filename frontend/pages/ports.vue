@@ -26,21 +26,26 @@
               <!--    details is an array of objects  -->
 
               <b-card-text>
+                <form @submit.prevent="edit? editRule(): addPort()">
                 <div class="input-group">
 
-                  <input id="port" type="text" class="form-control" placeholder="Port">
-                  <input id="impact" type="text" class="form-control" placeholder="Impact">
+                  <input id="port" type="text" class="form-control" placeholder="Port" 
+                  pattern="^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$" 
+                  title="Ports ranges from 0-65536">
+                  <input id="impact" type="text" class="form-control" placeholder="Impact" pattern="(high|medium|low)" 
+                  title="Impact have to be one of these : high, medium, low">
                   <input id="desc" type="text" class="form-control" placeholder="Description">
                   <div class="input-group-prepend">
-                    <base-button size="md"
-                                 @click="edit? editRule(): addPort()"
+                    <input type="submit" size="md"
 
-                                 class="scan-button"
+                                 class="btn-default"
+                                 :value="edit ? 'Edit Rule' : 'Add Rule' "
                     >
-                      {{ edit ? 'Edit Rule' : 'Add Rule' }}
-                    </base-button>
+                      
+                    
                   </div>
                 </div>
+                </form>
               </b-card-text>
             </b-collapse>
           </div>
@@ -135,6 +140,7 @@ import StatsCard from "@/components/argon-core/Cards/StatsCard";
 // tables
 import MainTable from "~/components/tables/RegularTables/MainTable";
 import Jsona from 'jsona';
+import Swal from "sweetalert2";
 
 const url = process.env.apiUrl;
 const jsona = new Jsona();
@@ -152,7 +158,7 @@ export default {
   data() {
     return {
       // containers related data
-      ports: [{port: "ff", description: "root", impact: "gg"}],
+      ports: [],
       loaded: {},
       valid: true, edit: false,
       editIndex: -1,
@@ -222,6 +228,9 @@ export default {
   },
   async fetch() {
     // this.containers = await this.$axios.$get(`${url}/containers`);
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     await this.$axios.get(`${url}/networkrules`)
         .then(response => {
           if (response.status !== 200) {
@@ -237,6 +246,7 @@ export default {
         }).catch(err => {
           this.loaded.error = "Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
   // methods: {
   //   async getProfile() {
@@ -262,15 +272,15 @@ export default {
             .then(response => {
               if (response.status !== 200) {
                 //this.loaded.responseError=true;
+                Swal.fire({icon:'error',title:"Error Creating The Rule"})
                 return;
               }
-
-              this.ports.push({
-                port: document.getElementById("port").value,
-                desc: document.getElementById("desc").value, impact: document.getElementById("impact").value
-              })
+              Swal.fire({icon:'success',title:"The Rule Created"})
+              this.ports=response.data;
+              
 
             }).catch(err => {
+              Swal.fire({icon:'error',title:"Error Creating The Rule"})
               //this.loaded.error="Error while requesting data please try again."
             });
 
@@ -294,6 +304,7 @@ export default {
       document.getElementById("impact").value = value.row.impact;
       this.edit = true;
       this.editIndex = value.index;
+      window.scrollTo(0, 0);
     },
     async editRule() {
       if (document.getElementById("port").value != ""
@@ -307,12 +318,14 @@ export default {
             .then(response => {
               if (response.status !== 200) {
                 //this.loaded.responseError=true;
+                Swal.fire({icon:'error',title:"Error Editing The Rule"})
                 return;
               }
-
+              Swal.fire({icon:'success',title:"The Rule Edited"})
               this.ports = response.data
 
             }).catch(err => {
+              Swal.fire({icon:'error',title:"Error Editing The Rule"})
               //this.loaded.error="Error while requesting data please try again."
             });
 

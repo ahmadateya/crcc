@@ -26,21 +26,23 @@
                   <!--    details is an array of objects  -->
                   
                   <b-card-text >
+                    <form @submit.prevent="edit? editRule(): addFile()">
                     <div class="input-group">
   
   <input id="file" type="text" class="form-control" placeholder="File:">
-  <input id="impact" type="text" class="form-control" placeholder="Impact">
+  <input id="impact" type="text" class="form-control" placeholder="Impact"
+  pattern="(high|medium|low)" 
+                  title="Impact have to be one of these : high, medium, low">
   <input id="desc" type="text" class="form-control" placeholder="Description">
   <div class="input-group-prepend">
-     <base-button size="md"
-                            @click="edit? editRule(): addFile()"
-                             
-                             class="scan-button"
-                >
-                  {{ edit? 'Edit Rule' : 'Add Rule' }}
-                </base-button>
+     <input type="submit" size="md"
+
+                                 class="btn-default"
+                                 :value="edit ? 'Edit Rule' : 'Add Rule' "
+                    >
   </div>
 </div>
+</form>
                   </b-card-text>
                 </b-collapse>
               </div>
@@ -137,6 +139,8 @@ import StatsCard from "@/components/argon-core/Cards/StatsCard";
 import MainTable from "~/components/tables/RegularTables/MainTable";
 import Jsona from 'jsona';
 import { map } from 'd3';
+import Swal from "sweetalert2";
+
 const url = process.env.apiUrl;
 const jsona = new Jsona();
 
@@ -153,7 +157,7 @@ export default {
   data() {
     return {
       // containers related data
-      files: [{file:"ff",description: "root",impact:"gg"}], 
+      files: [], 
       loaded:{},
       valid:true,edit: false,
       editIndex: -1,
@@ -223,6 +227,9 @@ export default {
   },
  async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
+   this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
      await this.$axios.get(`${url}/filesrules`)
          .then(response => {
            if(response.status!==200){
@@ -238,6 +245,7 @@ export default {
         }).catch(err=> {
           this.loaded.error="Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
   // methods: {
   //   async getProfile() {
@@ -261,13 +269,14 @@ export default {
          .then(response => {
            if(response.status!==200){
              //this.loaded.responseError=true;
+             Swal.fire({icon:'error',title:"Error Creating The Rule"})
              return;
            }
-           
-           this.files.push({file: document.getElementById("file").value,
-      desc: document.getElementById("desc").value , impact:document.getElementById("impact").value})
+           Swal.fire({icon:'success',title:"The Rule Created"})
+           this.files=response.data
            
         }).catch(err=> {
+          Swal.fire({icon:'error',title:"Error Creating The Rule"})
           //this.loaded.error="Error while requesting data please try again."
         });
       
@@ -290,6 +299,7 @@ export default {
     document.getElementById("impact").value=value.row.impact;
     this.edit=true;
     this.editIndex=value.index;
+    window.scrollTo(0, 0);
       },
       async editRule(){
       if(document.getElementById("file").value != "" 
@@ -301,12 +311,14 @@ export default {
          .then(response => {
            if(response.status!==200){
              //this.loaded.responseError=true;
+             Swal.fire({icon:'error',title:"Error Editing The Rule"})
              return;
            }
-           
+           Swal.fire({icon:'success',title:"The Rule Edited"})
            this.files=response.data
            
         }).catch(err=> {
+          Swal.fire({icon:'error',title:"Error Editing The Rule"})
           //this.loaded.error="Error while requesting data please try again."
         });
       

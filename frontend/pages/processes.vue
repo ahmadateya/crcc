@@ -26,22 +26,24 @@
                   <!--    details is an array of objects  -->
                   
                   <b-card-text >
+                    <form @submit.prevent="edit? editRule(): addProcess()">
                     <div class="input-group">
   
   <input id="cmd" type="text" class="form-control" placeholder="CMD: You can put it as regex">
   <input id="user" type="text" class="form-control" placeholder="User">
-  <input id="impact" type="text" class="form-control" placeholder="Impact">
+  <input id="impact" type="text" class="form-control" placeholder="Impact"
+  pattern="(high|medium|low)" 
+                  title="Impact have to be one of these : high, medium, low">
   <input id="desc" type="text" class="form-control" placeholder="Description">
   <div class="input-group-prepend">
-     <base-button size="md"
-                            @click="edit? editRule(): addProcess()"
-                             
-                             class="scan-button"
-                >
-                  {{ edit? 'Edit Rule' : 'Add Rule' }}
-                </base-button>
+     <input type="submit" size="md"
+
+                                 class="btn-default"
+                                 :value="edit ? 'Edit Rule' : 'Add Rule' "
+                    >
   </div>
 </div>
+</form>
                   </b-card-text>
                 </b-collapse>
               </div>
@@ -138,6 +140,7 @@ import StatsCard from "@/components/argon-core/Cards/StatsCard";
 import MainTable from "~/components/tables/RegularTables/MainTable";
 import Jsona from 'jsona';
 import { map } from 'd3';
+import Swal from "sweetalert2";
 const url = process.env.apiUrl;
 const jsona = new Jsona();
 
@@ -154,7 +157,7 @@ export default {
   data() {
     return {
       // containers related data
-      processes: [{cmd:"ff",user: "root",desc:"ff",impact:"gg"}], 
+      processes: [], 
       loaded:{},
       valid:true,
       edit: false,
@@ -225,6 +228,9 @@ export default {
   },
   async fetch() {
    // this.containers = await this.$axios.$get(`${url}/containers`);
+   this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
      await this.$axios.get(`${url}/processesrules`)
          .then(response => {
            if(response.status!==200){
@@ -237,9 +243,11 @@ export default {
            }
            
            
+           
         }).catch(err=> {
           this.loaded.error="Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
   // methods: {
   //   async getProfile() {
@@ -263,13 +271,14 @@ export default {
          .then(response => {
            if(response.status!==200){
              //this.loaded.responseError=true;
+             Swal.fire({icon:'error',title:"Error Creating Rule"})
              return;
            }
-           
-           this.processes.push({cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
-      desc: document.getElementById("desc").value , impact:document.getElementById("impact").value})
+           Swal.fire({icon:'success',title:"The Rule created"})
+           this.processes=response.data;
            
         }).catch(err=> {
+          Swal.fire({icon:'error',title:"Error Creating Rule"})
           //this.loaded.error="Error while requesting data please try again."
         });
       
@@ -283,6 +292,7 @@ export default {
     document.getElementById("desc").value="";
     document.getElementById("impact").value="";
     }
+    
   },
   updateToggle(value){
     
@@ -296,6 +306,7 @@ export default {
     document.getElementById("impact").value=value.row.impact;
     this.edit=true;
     this.editIndex=value.index;
+    window.scrollTo(0, 0);
       },
       async editRule(){
       if(document.getElementById("cmd").value != "" 
@@ -303,16 +314,18 @@ export default {
   var data={cmd: document.getElementById("cmd").value,user:document.getElementById("user").value,
       description: document.getElementById("desc").value , impact:document.getElementById("impact").value};
 
-        await this.$axios.put(`${url}/editport/` + this.editIndex, data)
+        await this.$axios.put(`${url}/editprocess/` + this.editIndex, data)
             .then(response => {
               if (response.status !== 200) {
                 //this.loaded.responseError=true;
+                Swal.fire({icon:'error',title:"Error Editing The Rule"})
                 return;
               }
-
-              this.ports = response.data
+              Swal.fire({icon:'success',title:"The Rule Edited"})
+              this.processes = response.data
 
             }).catch(err => {
+              Swal.fire({icon:'error',title:"Error Editing The Rule"})
               //this.loaded.error="Error while requesting data please try again."
             });
 

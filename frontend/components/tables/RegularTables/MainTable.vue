@@ -116,6 +116,7 @@
   </div>
 </template>
 <script>
+import Swal from "sweetalert2";
 import {Table, TableColumn, DropdownMenu, DropdownItem, Dropdown} from 'element-ui'
 
 const url = process.env.apiUrl;
@@ -135,8 +136,10 @@ export default {
           .then(response => {
             if (response.status !== 200) {
               //this.loaded.responseError=true;
+              Swal.fire({icon:'error',title:"Error Deleting The Rule"})
               return;
             }
+            Swal.fire({icon:'success',title:"The Rule Deleted"})
             this.rows = response.data;
             if (this.rows.length === 0) {
               // this.loaded.length=0;
@@ -144,6 +147,7 @@ export default {
 
 
           }).catch(err => {
+            Swal.fire({icon:'error',title:"Error Deleting The Rule"})
             //this.loaded.error="Error while requesting data please try again."
           });
     },
@@ -152,8 +156,10 @@ export default {
           .then(response => {
             if (response.status !== 200) {
               //this.loaded.responseError=true;
+              Swal.fire({icon:'error',title:"Error Deleting The Rule"})
               return;
             }
+            Swal.fire({icon:'success',title:"The Rule Deleted"})
             this.rows = response.data;
             if (this.rows.length === 0) {
               // this.loaded.length=0;
@@ -161,6 +167,7 @@ export default {
 
 
           }).catch(err => {
+            Swal.fire({icon:'error',title:"Error Deleting The Rule"})
             //this.loaded.error="Error while requesting data please try again."
           });
     },
@@ -169,15 +176,19 @@ export default {
           .then(response => {
             if (response.status !== 200) {
               //this.loaded.responseError=true;
+              Swal.fire({icon:'error',title:"Error Deleting The Rule"})
               return;
             }
+            Swal.fire({icon:'success',title:"The Rule Deleted"})
             this.rows = response.data;
+            
             if (this.rows.length === 0) {
               // this.loaded.length=0;
             }
 
 
           }).catch(err => {
+            Swal.fire({icon:'error',title:"Error Deleting The Rule"})
             //this.loaded.error="Error while requesting data please try again."
           });
     },
@@ -186,8 +197,10 @@ export default {
           .then(response => {
             if (response.status !== 200) {
               //this.loaded.responseError=true;
+              Swal.fire({icon:'error',title:"Error Deleting The Rule"})
               return;
             }
+            Swal.fire({icon:'success',title:"The Rule Deleted"})
             this.rows = response.data;
             if (this.rows.length === 0) {
               // this.loaded.length=0;
@@ -195,6 +208,7 @@ export default {
 
 
           }).catch(err => {
+            Swal.fire({icon:'error',title:"Error Deleting The Rule"})
             //this.loaded.error="Error while requesting data please try again."
           });
     }

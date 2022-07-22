@@ -47,6 +47,12 @@
                 <i class="ni ni-calendar-grid-58"></i> <span> {{ scan.CreatedAt }}</span>
               </h1>
             </div>
+           
+           <base-button size="md" @click="deleteHistory(scanIndex,scan.name,scan.CreatedAt)">Delete</base-button>
+              
+                
+              
+            
           </div>
         </div>
         <div class="border card-body ">
@@ -133,6 +139,7 @@ import ViewContainer from "@/components/ViewContainer";
 import {BIcon} from 'bootstrap-vue'
 
 import Jsona from 'jsona';
+import Swal from "sweetalert2";
 
 const url = process.env.apiUrl;
 const jsona = new Jsona();
@@ -156,6 +163,9 @@ export default {
     }
   },
   async fetch() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     await this.$axios.get(`${url}/containers/${this.$route.params.container}/history`)
         .then(response => {
           if (response.status !== 200) {
@@ -167,7 +177,29 @@ export default {
         }).catch(err => {
           this.loaded.error = "Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
+  methods: {
+    async deleteHistory(scanIndex,container,createdat) {
+      await this.$axios.delete(`${url}/deletehistory/` + container+"?createdat="+createdat)
+          .then(response => {
+            if (response.status !== 200) {
+              //this.loaded.responseError=true;
+              Swal.fire({icon:'error',title:"Error Deleting The History"})
+              return;
+            }
+            this.history.splice(scanIndex,1)
+            Swal.fire({icon:'success',title:"History Deleted"})
+            
+            
+
+
+          }).catch(err => {
+            Swal.fire({icon:'error',title:"Error Deleting The History"})
+            //this.loaded.error="Error while requesting data please try again."
+          });
+    }
+  }
 };
 </script>
 <style scoped>

@@ -41,6 +41,14 @@
             }"
           >
           </sidebar-item>
+          <sidebar-item
+              :link="{
+              name: 'DNS Rules',
+              icon: 'fas fa-shield-alt text-primary',
+              path: '/dns',
+            }"
+          >
+          </sidebar-item>
         </sidebar-item>
 <!--        >-->
 <!--          <sidebar-item-->

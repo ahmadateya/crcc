@@ -35,7 +35,7 @@
   <input id="cnninput" type="text" class="form-control" placeholder="Enter A Path" aria-label="CNN Scan" aria-describedby="basic-addon2">
   <div class="input-group-append">
     <base-button size="lg"
-                            @click="cnnScan"
+                            @click="cnnScan(container.name)"
                              
                              class="scan-button"
                 >
@@ -176,6 +176,9 @@ export default {
     }
   },
   async fetch() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     await this.$axios.get(`${url}/containers/${this.$route.params.container}`)
         .then(response => {
           if (response.status !== 200) {
@@ -186,6 +189,7 @@ export default {
         }).catch(err => {
           this.loaded.error = "Error while requesting data please try again."
         });
+        this.$nuxt.$loading.finish()
   },
   methods: {
     async scanContainer() {
@@ -218,7 +222,7 @@ export default {
             console.log(err, "error");
           });
     },
-    async cnnScan(){
+    async cnnScan(name){
       
      
       
@@ -229,7 +233,7 @@ export default {
       this.isScanned=true;
       this.$nuxt.$loading.start();
 
-      await this.$axios.get("http://172.21.0.4:5001/container/cnnscan?container=6c3e8d39dbe5"+
+      await this.$axios.get("http://localhost:5001/container/cnnscan?container="+name.substring(1)+
       "&path="+document.getElementById("cnninput").value).then(response=>{
         if (response.status !== 200) {
               this.loaded.responseError = true;

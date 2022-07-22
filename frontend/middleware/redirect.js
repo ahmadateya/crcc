@@ -1,3 +1,5 @@
-export default function ({ app, redirect }) {
-  return redirect('/dashboard')
+export default function (ctx) {
+  if(ctx.route.fullPath=='/'){
+    ctx.redirect(301,'/dashboard')
+  }
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -129,13 +128,13 @@ func Scan(c *gin.Context) {
 	scanResponse.Results = append(scanResponse.Results, processScan)
 
 	// apply dns analysis to the container
-	//dnsScan, err := applyDnsAnalysis(containerId)
-	//if err != nil {
-	//	c.JSON(500, err.Error())
-	//	return
-	//}
+	dnsScan, err := applyDnsAnalysis(containerId)
+	if err != nil {
+		c.JSON(500, err.Error())
+		return
+	}
 	// append dns analysis to the scan response
-	//scanResponse.Results = append(scanResponse.Results, dnsScan)
+	scanResponse.Results = append(scanResponse.Results, dnsScan)
 	// calc the compliance
 	scanResponse.Compliance = calcCompliance(scanResponse.Results)
 
@@ -198,22 +197,60 @@ func History(c *gin.Context) {
 	c.JSON(200, containerScans)
 }
 
-func StoreCNN(c *gin.Context) {
-	containerId := c.Query("container")
-
-	type Data struct {
-		Data models.ScanDataResponse `json:"data"`
+func DeleteHistory(c *gin.Context){
+	container:=c.Param("container")
+	createdAt:=c.Query("createdat")
+	viper := config.NewViper()
+	db, err := gorm.Open("postgres", viper.Database.Connection)
+	if err != nil {
+		fmt.Printf(err.Error())
+		panic(err.Error())
 	}
-	var data Data
+    
+	sqlStatement := `DELETE FROM containers WHERE name=$1 and created_at=$2`
+
+  fmt.Println(createdAt)
+ res := db.Exec(sqlStatement,container,createdAt)
+ if res.Error != nil{
+	c.JSON(500,res.Error.Error())
+   return 
+ }
+
+c.JSON(200, res.Value)
+}
+
+func StoreCNN(c *gin.Context) {
+	containerId := c.Param("container")
+    jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ScanDataResponse
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
+		return
+	}
+	
+	/*var data models.ScanDataResponse
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		
+		fmt.Println("fffffff"+string(jsonData))
 		return
-	}
+	}*/
 
-	err := storeAnalysis(containerId, data.Data)
+	err = storeAnalysis(containerId, data)
 	if err != nil {
+		
 		c.JSON(500, err.Error())
 		return
 	}
@@ -320,11 +357,27 @@ func GetPorts(c *gin.Context) {
 
 func AddProcess(c *gin.Context) {
 
-	var data models.ContainerProcess
+	/*var data models.ContainerProcess
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerProcess
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -343,7 +396,7 @@ func AddProcess(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalProcesses []models.ContainerProcess
 
@@ -371,11 +424,28 @@ func AddProcess(c *gin.Context) {
 
 func AddFile(c *gin.Context) {
 
-	var data models.ContainerFile
+	/*var data models.ContainerFile
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerFile
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -394,7 +464,7 @@ func AddFile(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalFiles []models.ContainerFile
 
@@ -422,11 +492,28 @@ func AddFile(c *gin.Context) {
 
 func AddDns(c *gin.Context) {
 
-	var data models.ContainerDns
+	/*var data models.ContainerDns
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerDns
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -445,7 +532,7 @@ func AddDns(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalDns []models.ContainerDns
 
@@ -473,11 +560,28 @@ func AddDns(c *gin.Context) {
 
 func AddPort(c *gin.Context) {
 
-	var data models.ContainerPorts
+	/*var data models.ContainerPorts
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerPorts
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -496,7 +600,7 @@ func AddPort(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _= ioutil.ReadAll(file)
 
 	var currentMalPorts []models.ContainerPorts
 
@@ -703,11 +807,27 @@ func EditFile(c *gin.Context) {
 
 	currentIndex, _ := strconv.Atoi(index)
 
-	var data models.ContainerFile
+	/*var data models.ContainerFile
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerFile
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -720,7 +840,7 @@ func EditFile(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalFiles []models.ContainerFile
 
@@ -753,11 +873,28 @@ func EditPort(c *gin.Context) {
 
 	currentIndex, _ := strconv.Atoi(index)
 
-	var data models.ContainerPorts
+	/*var data models.ContainerPorts
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerPorts
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -770,7 +907,7 @@ func EditPort(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalPorts []models.ContainerPorts
 
@@ -803,11 +940,28 @@ func EditProcess(c *gin.Context) {
 
 	currentIndex, _ := strconv.Atoi(index)
 
-	var data models.ContainerProcess
+	/*var data models.ContainerProcess
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerProcess
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -820,7 +974,7 @@ func EditProcess(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalProcesses []models.ContainerProcess
 
@@ -853,11 +1007,28 @@ func EditDns(c *gin.Context) {
 
 	currentIndex, _ := strconv.Atoi(index)
 
-	var data models.ContainerDns
+	/*var data models.ContainerDns
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
+	}*/
+
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+    if err != nil {
+		
+    c.JSON(500, err.Error())
+		return
+    }
+
+	var data models.ContainerDns
+
+	err = json.Unmarshal([]byte(jsonData), &data)
+
+	if err != nil {
+		
+		c.JSON(500, err.Error())
 		return
 	}
 
@@ -870,7 +1041,7 @@ func EditDns(c *gin.Context) {
 	}
 	defer file.Close()
 
-	jsonData, _ := ioutil.ReadAll(file)
+	jsonData, _ = ioutil.ReadAll(file)
 
 	var currentMalDns []models.ContainerDns
 
