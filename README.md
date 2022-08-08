@@ -30,6 +30,9 @@ Our compliance is based on 4 main pillars:
 
 
 ## How to run the project?
+- start the application by running
+
 ```
 sh start.sh
 ```
+- browse the app at: http://localhost:3000
