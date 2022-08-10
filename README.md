@@ -24,7 +24,8 @@ Our compliance is based on 4 main pillars:
 
 ### App Architecture
 <img src="./docs/app_architecture.png" width="500" height="400"/>
-
+---
+### [Demo Video](https://github.com/ahmadateya/crcc/blob/master/docs/CRCC%20App%20Demo.mp4) 
 ---
 ## Technologies
 - [Go](https://go.dev/) for the Backend with [Standard Go Project Layout](https://github.com/golang-standards/project-layout) the project structure we follow
@@ -32,7 +33,7 @@ Our compliance is based on 4 main pillars:
 - [Docker & Docker compose](https://www.docker.com/) for containers management and Docker APIs for interacting with containers
 - [PostgreSQL](https://www.postgresql.org/) DBMS for saving our scan histories 
 
-
+---
 ## How to run the project?
 - start the application by running
 
