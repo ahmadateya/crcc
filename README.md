@@ -24,8 +24,9 @@ Our compliance is based on 4 main pillars:
 
 ### App Architecture
 <img src="./docs/app_architecture.png" width="500" height="400"/>
+
 ---
-### [Demo Video](https://github.com/ahmadateya/crcc/blob/master/docs/CRCC%20App%20Demo.mp4) 
+### [Demo Video](https://github.com/ahmadateya/crcc/blob/master/docs/CRCC%20App%20Demo.mp4) explaining How App works
 ---
 ## Technologies
 - [Go](https://go.dev/) for the Backend with [Standard Go Project Layout](https://github.com/golang-standards/project-layout) the project structure we follow
