@@ -22,6 +22,10 @@ Our compliance is based on 4 main pillars:
 3. Network Analysis
 4. DNS Analysis
 
+### App Architecture
+<img src="./docs/app_architecture.png" width="500" height="400"/>
+
+---
 ## Technologies
 - [Go](https://go.dev/) for the Backend with [Standard Go Project Layout](https://github.com/golang-standards/project-layout) the project structure we follow
 - NuxtJs framework with Aragon theme [live preview](https://nuxt-argon-dashboard-laravel.creative-tim.com/dashboard/).
